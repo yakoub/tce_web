@@ -1,0 +1,29 @@
+<section class="game short">
+  <a class="game-id" href="{{ object.get_absolute_url }}"> [{{object.id}}] </a>
+  <header class="highlighted">
+    <div class="map"> <em> Map  </em> {{ object.mapname }} </div>
+    <div class="hostname"> <em> hostname  </em> {{object.hostname }} </div>
+    <div class="gametype"> <em> gametype </em>  {{object.gametype }} </div>
+  </header>
+  <table> 
+  <caption> 
+    <em> specops </em> {{object.team_blue}}
+    <em> terrorists </em> {{object.team_red}}
+  </caption>
+  <thead> <tr>
+    <th> Name </th> <th> Team </th> <th> Kills  </th>
+    <th> Damage </th> <th> Ping </th>
+  </tr> </thead>
+  <tbody>
+    {% for player in object.gameplayer_set.all %}
+      <tr>
+      <td> {{ player.player.name }} </td>
+      <td> {{ player.team }} </td>
+      <td> {{ player.kills }} </td>
+      <td> {{ player.damage_given }} </td>
+      <td> {{ player.ping }} </td>
+      </tr>
+    {% endfor %}
+  </tbody> 
+  </table>
+</section>

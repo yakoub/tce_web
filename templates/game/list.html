@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% load static %}
+{% block styles %}
+  {{ block.super }}
+  <link rel="stylesheet" type="text/css" href="{% static 'css/game.css' %}" />
+{% endblock %}
+
+{% block body %}
+  <section class="list">
+    {% block list_header %}
+    {% endblock %}
+
+    {% block list_items %}
+      <ul class="top alternating">
+      {% for object in object_list %}
+        <li class="altered"> 
+        {% include 'game/gamematch_short.html' %}
+        </li>
+      {% endfor %}
+      </ul>
+    {% endblock %}
+  </section>
+  {% include 'pager.html' with page=page_obj pager=paginator %}
+
+{% endblock body %}

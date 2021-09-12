@@ -1,0 +1,24 @@
+{% load static %}
+{% load i18n %}
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title> {% block title %} django1 {% endblock %} </title>
+  {% block styles %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/base.css' %}" />
+  {% endblock %}
+  {% block scripts %}
+  {% endblock %}
+</head>
+<body class="dark-blue">
+  <div id="page">
+  <header> <a href="/"> Homepage </a> </header>
+    {% block body %}
+    {% endblock %}
+  </div>
+  <!-- pre> {# % debug % #} </pre -->
+  <!-- pre> {# {inspect} #} </pre -->
+</body>
+</html>

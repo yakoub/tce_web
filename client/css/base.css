@@ -62,53 +62,11 @@ a:visited {
   color: #1E88E5;
 }
 
-/* game */
-.game {
-  margin-top: 0.5rem;
-}
-
+/* list */
 section.list ul.top {
   list-style: none;
   padding: 0;
-  min-width: 50%;
 }
-
-.game header {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 1rem;
-}
-
-.game header dd {
-  margin: 0 1em;
-}
-
-@media (min-width: 1025px) {
-  .game header {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
-
-@media (min-width: 621px) {
-  .game {
-    padding: 1rem;
-    margin: 1em 0;
-    border-radius: 8px;
-  }
-
-  .game header {
-    padding: 0.5em;
-    border-radius: 8px 8px 0 0;
-  }
-}
-
-.game header dt {
-  font-weight: bolder;
-}
-.game > a {
-  font-weight: bold;
-}
-
 
 /* pager */
 

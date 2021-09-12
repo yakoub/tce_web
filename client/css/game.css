@@ -1,0 +1,46 @@
+.game {
+  margin-top: 0.5rem;
+}
+
+.game header {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+.game a.game-id {
+  text-decoration: none;
+  font-weight: bolder;
+}
+
+.game header em {
+  font-weight: bolder;
+}
+
+@media (min-width: 1025px) {
+  .game header {
+    grid-template-columns: 1fr 3fr 1fr;
+  }
+}
+
+@media (max-width: 1024px) {
+  .game .hostname {
+    grid-column: 1/3;
+  }
+  .game .map, .game .gametype {
+    grid-row: 2;
+  }
+}
+
+@media (min-width: 621px) {
+  .game {
+    padding: 1rem;
+    margin: 1em 0;
+    border-radius: 8px;
+  }
+
+  .game header {
+    padding: 0.5em;
+    border-radius: 8px 8px 0 0;
+  }
+}
