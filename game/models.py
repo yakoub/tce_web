@@ -19,12 +19,21 @@ class GameMatch(models.Model):
         db_table = 'game_match'
         managed = False
 
+class PlayerIndex(models.Model):
+    guid = models.CharField('guid', max_length=32)
+    name = models.CharField('Name', max_length=64)
+
+    class Meta:
+        db_table = 'player_index'
+        managed = False
+
 class GamePlayer(models.Model):
     game = models.ForeignKey(GameMatch, db_column='match_id',
         on_delete=models.DO_NOTHING)
     idx = models.SmallIntegerField('Idx', primary_key = True)
     team = models.SmallIntegerField('Team')
-    name = models.CharField('Name', max_length=64)
+    player = models.ForeignKey(PlayerIndex, db_column='player_id',
+        on_delete=models.DO_NOTHING)
     ping = models.SmallIntegerField('Ping')
     score = models.SmallIntegerField('Score')
     kills = models.SmallIntegerField('Kills')
@@ -34,7 +43,7 @@ class GamePlayer(models.Model):
     damage_recieved = models.SmallIntegerField('Damage recieved')
 
     def __str__(self):
-        return f"{self.name=} {self.idx=} {self.kills=} {self.score=}"
+        return f"{self.player_id=} {self.idx=} {self.kills=} {self.score=}"
 
     class Meta:
         db_table = 'game_player'

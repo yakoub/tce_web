@@ -8,7 +8,7 @@ class GameList(ListView):
 
     def get_queryset(self):
         queryset = super(GameList, self).get_queryset()
-        return queryset.prefetch_related('gameplayer_set').order_by('-id')
+        return queryset.prefetch_related('gameplayer_set__player').order_by('-id')
 
     def get_template_names(self):
         return ['game/list.html', 'list.html']
@@ -20,7 +20,7 @@ class GameView(DetailView):
     
     def get_queryset(self):
         queryset = super(GameView, self).get_queryset()
-        return queryset.prefetch_related('gameplayer_set')
+        return queryset.prefetch_related('gameplayer_set__player')
 
     def get_context_data(self, **kwargs):
         context = super(GameView, self).get_context_data(**kwargs)
