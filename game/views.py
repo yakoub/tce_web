@@ -1,5 +1,5 @@
 from django.views.generic import DetailView, ListView
-from .models import GameMatch, GamePlayer
+from .models import GameMatch, GamePlayer, PlayerIndex
 
 class GameList(ListView):
     
@@ -29,4 +29,17 @@ class GameView(DetailView):
 
 class PlayerView(DetailView):
 
-    model = GamePlayer
+    model = PlayerIndex
+
+    def get_context_data(self, **kwargs):
+        context = super(PlayerView, self).get_context_data(**kwargs)
+        context['game_list'] = GameMatch.objects\
+            .filter(gameplayer__player_id = self.object.id)\
+            .prefetch_related('gameplayer_set__player').all()
+
+        context['alias_list'] = PlayerIndex.objects\
+            .filter(guid = self.object.guid)\
+            .exclude(guid = '#')\
+            .exclude(id = self.object.id).all()
+        return context
+

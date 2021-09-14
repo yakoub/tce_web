@@ -7,7 +7,7 @@
 {% endblock %}
 
 {% block body %}
-<section class="game short dark-gray">
+<section class="game dark-gray">
   <a class="game-id" href="{{ object.get_absolute_url }}"> [{{object.id}}] </a>
   <header class="highlighted">
     <div class="map"> <em> Map  </em> {{ object.mapname }} </div>
@@ -23,7 +23,9 @@
   <tbody>
     {% for player in object.gameplayer_set.all %}
       <tr>
-      <td> {{ player.player.name }} </td>
+      <td> <a href="{{ player.player.get_absolute_url }}">
+        {{ player.player.name }} 
+      </a> </td>
       <td> {{ player.team }} </td>
       <td> {{ player.kills }} </td>
       <td> {{ player.deaths }} </td>

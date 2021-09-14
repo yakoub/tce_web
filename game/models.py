@@ -23,6 +23,9 @@ class PlayerIndex(models.Model):
     guid = models.CharField('guid', max_length=32)
     name = models.CharField('Name', max_length=64)
 
+    def get_absolute_url(self):
+        return reverse('game:player-view', kwargs={'pk': self.pk})
+
     class Meta:
         db_table = 'player_index'
         managed = False

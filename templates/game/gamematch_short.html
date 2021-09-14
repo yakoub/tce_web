@@ -17,7 +17,9 @@
   <tbody>
     {% for player in object.gameplayer_set.all %}
       <tr>
-      <td> {{ player.player.name }} </td>
+      <td>  <a href="{{ player.player.get_absolute_url }}">
+        {{ player.player.name }} 
+      </a> </td>
       <td> {{ player.team }} </td>
       <td> {{ player.kills }} </td>
       <td> {{ player.damage_given }} </td>

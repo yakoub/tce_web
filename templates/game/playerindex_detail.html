@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% load static %}
+{% block styles %}
+  {{ block.super }}
+  <link rel="stylesheet" type="text/css" href="{% static 'css/game.css' %}" />
+{% endblock %}
+
+{% block body %}
+  <section class="player">
+    <div> <em> Name </em> {{ object.name }} </div>
+    {% if alias_list %}
+    <div> <em>  Aliases: </em> </div>
+    <ul>
+      {% for player in alias_list %}
+      <li> <a href="{{ player.get_absolute_url }}">
+        {{ player.name }} 
+      </a> </li>
+      {% endfor %}
+    </ul>
+    {% endif %}
+  </section>
+  <section class="list">
+    {% block list_header %}
+    <header> Games: </header>
+    {% endblock %}
+
+    {% block list_items %}
+      <ul class="top alternating">
+      {% for game in game_list %}
+        <li class="altered"> 
+        {% include 'game/gamematch_short.html' with object=game %}
+        </li>
+      {% endfor %}
+      </ul>
+    {% endblock %}
+  </section>
+  {% include 'pager.html' with page=page_obj pager=paginator %}
+
+{% endblock body %}
