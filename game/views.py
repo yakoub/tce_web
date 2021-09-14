@@ -1,4 +1,5 @@
 from django.views.generic import DetailView, ListView
+from django.core.paginator import Paginator
 from .models import GameMatch, GamePlayer, PlayerIndex
 
 class GameList(ListView):
@@ -33,9 +34,14 @@ class PlayerView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(PlayerView, self).get_context_data(**kwargs)
-        context['game_list'] = GameMatch.objects\
+        game_list = GameMatch.objects\
             .filter(gameplayer__player_id = self.object.id)\
-            .prefetch_related('gameplayer_set__player').all()
+            .prefetch_related('gameplayer_set__player')\
+            .order_by('-id').all()
+
+        paginator = Paginator(game_list, 10)
+        page_number = self.request.GET.get('page')
+        context['game_list'] = paginator.get_page(page_number)
 
         context['alias_list'] = PlayerIndex.objects\
             .filter(guid = self.object.guid)\
