@@ -44,3 +44,10 @@
     border-radius: 8px 8px 0 0;
   }
 }
+
+@media (max-width: 620px) {
+  .game {
+    margin: 0;
+    padding-top: 0.5rem;
+  }
+}
