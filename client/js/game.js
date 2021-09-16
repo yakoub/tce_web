@@ -16,13 +16,23 @@ TCENames.player_section = function () {
 
 TCENames.player_names = function (a) {
   let name = a.dataset.name
+  let name_html = window.localStorage.getItem('name-html-' + name)
+  if (name_html) {
+    a.innerHTML = '[' + name_html + ']'
+    return
+  }
+  if (window.localStorage.getItem('name-plain-' + name)) {
+    a.textContent = '[' + a.dataset.name + ']'
+    return
+  }
+
   var pattern = '^(?<prefix>[^^]*)'
   + '((?<code>\\^[a-z0-9])|(?<ncode>\\^[^a-z0-9]))'
   + '(?<colored>[^^]+)'
   + '(?<suffix>.*)$'
   var reg = new RegExp(pattern)
   let parse = name.match(reg)
-  let name_html = ''
+  name_html = ''
   while (parse) {
     name = parse.groups.suffix
     name_html += parse.groups.prefix
@@ -43,9 +53,11 @@ TCENames.player_names = function (a) {
     parse = name.match(reg)
   }
   if (name_html) {
+    window.localStorage.setItem('name-html-' + a.dataset.name, name_html)
     a.innerHTML = '[' + name_html + ']'
   }
   else {
+    window.localStorage.setItem('name-plain-' + a.dataset.name, '#')
     a.textContent = '[' + a.dataset.name + ']'
   }
 }
