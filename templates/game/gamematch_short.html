@@ -17,8 +17,8 @@
   <tbody>
     {% for player in object.gameplayer_set.all %}
       <tr>
-      <td>  <a href="{{ player.player.get_absolute_url }}">
-        {{ player.player.name }} 
+      <td> <a data-name="{{ player.player.name }}" 
+          href="{{ player.player.get_absolute_url }}">
       </a> </td>
       <td> {{ player.team }} </td>
       <td> {{ player.kills }} </td>
@@ -28,4 +28,5 @@
     {% endfor %}
   </tbody> 
   </table>
+  <script type="text/javascript"> TCENames.game_section(); </script>
 </section>

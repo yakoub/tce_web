@@ -23,11 +23,11 @@ body {
 
 @media (max-width: 620px) {
   body {
-    font-size: 22px;
+    font-size: 18px;
     margin: 0;
   }
   #page {
-    min-width: 20rem;
+    min-width: 22rem;
     padding: 0;
   }
 }
@@ -78,7 +78,4 @@ nav.pager ul {
   justify-content: space-between;
   margin: 0;
   padding: 0;
-}
-
-nav.pager li {
 }

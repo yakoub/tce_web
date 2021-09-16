@@ -8,17 +8,17 @@
 
 {% block body %}
   <section class="player">
-    <div> <em> Name </em> {{ object.name }} </div>
+    <div> <em> Name </em> <span data-name="{{ object.name }}"> </span> </div>
     {% if alias_list %}
     <div> <em>  Aliases: </em> </div>
-    <ul>
+    <ul class="aliases">
       {% for player in alias_list %}
-      <li> <a href="{{ player.get_absolute_url }}">
-        {{ player.name }} 
+      <li> <a data-name="{{ player.name }}" href="{{ player.get_absolute_url }}">
       </a> </li>
       {% endfor %}
     </ul>
     {% endif %}
+    <script> TCENames.player_section() </script>
   </section>
   <section class="list">
     {% block list_header %}

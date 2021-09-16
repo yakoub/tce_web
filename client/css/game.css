@@ -13,6 +13,12 @@
   font-weight: bolder;
 }
 
+ul.aliases a,
+.game > table td a {
+  color: white;
+  text-decoration: none;
+}
+
 .game header em {
   font-weight: bolder;
 }
@@ -50,4 +56,138 @@
     margin: 0;
     padding-top: 0.5rem;
   }
+}
+
+i.c-0, i.c-p {
+  color: #000000;
+}
+i.c-1, i.c-q {
+  color: #ff0000;
+}
+i.c-2, i.c-r {
+  color: #00ff00;
+}
+i.c-3, i.c-s {
+  color: #ffff00;
+}
+i.c-4, i.c-t {
+  color: #0000ff;
+}
+i.c-5, i.c-u {
+  color: #00ffff;
+}
+i.c-6, i.c-v {
+  color: #ff00ff;
+}
+i.c-7, i.c-w {
+  color: #ffffff;
+}
+i.c-8, i.c-x {
+  color: #ff7f00;
+}
+i.c-9, i.c-y {
+  color: #7f7f7f;
+}
+i.c-z {
+  color: #bfbfbf;
+}
+i.c-a {
+  color: #ff9919;
+}
+i.c-b {
+  color: #007f7f;
+}
+i.c-c {
+  color: #7f007f;
+}
+i.c-d {
+  color: #007fff;
+}
+i.c-e {
+  color: #7f00ff;
+}
+i.c-f {
+  color: #3399cc;
+}
+i.c-g {
+  color: #ccffcc;
+}
+i.c-h {
+  color: #006633;
+}
+i.c-i {
+  color: #ff0033;
+}
+i.c-j {
+  color: #b21919;
+}
+i.c-k {
+  color: #993300;
+}
+i.c-l {
+  color: #cc9933;
+}
+i.c-m {
+  color: #999933;
+}
+
+i.c-c1 {
+  color: #bfbfbf;
+}
+i.c-c2 {
+  color: #bfbfbf;
+}
+i.c-c3 {
+  color: #007f00;
+}
+i.c-c4 {
+  color: #7f7f00;
+}
+i.c-c5 {
+  color: #00007f;
+}
+i.c-c6 {
+  color: #7f0000;
+}
+i.c-c7 {
+  color: #7f3f00;
+}
+i.c-c8 {
+  color: #ff9919;
+}
+i.c-c9 {
+  color: #007f7f;
+}
+i.c-c10 {
+  color: #7f007f;
+}
+i.c-c11 {
+  color: #007fff;
+}
+i.c-c12 {
+  color: #7f00ff;
+}
+i.c-c13 {
+  color: #3399cc;
+}
+i.c-c14 {
+  color: #ccffcc;
+}
+i.c-c15 {
+  color: #006633;
+}
+i.c-c16 {
+  color: #ff0033;
+}
+i.c-c17 {
+  color: #b21919;
+}
+i.c-c18 {
+  color: #993300;
+}
+i.c-c19 {
+  color: #cc9933;
+}
+i.c-c20 {
+  color: #999933;
 }
