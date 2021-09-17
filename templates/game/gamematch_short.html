@@ -2,9 +2,11 @@
   <a class="game-id" href="{{ game.get_absolute_url }}"> [{{game.id}}] </a>
   <header class="highlighted">
     <div class="map"> <em> Map  </em> {{ game.mapname }} </div>
-    <div class="hostname"> <em> Hostname  </em> {{game.hostname }} </div>
+    <div class="hostname"> <em> Hostname  </em> 
+      <span data-name="{{ game.hostname }}"> </span>
+    </div>
     <div class="gametype"> 
-      <em> Gametype </em>  <span data-type="{{game.gametype }}"></span>
+      <em> Gametype </em>  <span data-type="{{ game.gametype }}"></span>
     </div>
     <div class="created"> <em> Created </em> 
       {{game.created|date:"N j, Y /H:i e" }}
