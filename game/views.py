@@ -15,6 +15,7 @@ class TeamsMixin:
                 game.blue_players.append(player)
             else :
                 game.spectators.append(player)
+        game.player_count = len(game.red_players) + len(game.blue_players)
 
 class GameList(TeamsMixin, ListView):
     

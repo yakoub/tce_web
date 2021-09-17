@@ -1,11 +1,13 @@
 {% load static %}
 {% load i18n %}
 <!DOCTYPE html>
-<html>
+<html prefix="og: https://ogp.me/hs#">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title> {% block title %} tce stats {% endblock %} </title>
+  {% block meta %}
+  {% endblock %}
   {% block styles %}
     <link rel="stylesheet" type="text/css" href="{% static 'css/base.css' %}" />
   {% endblock %}

@@ -1,6 +1,14 @@
 {% extends "base.html" %}
 
 {% load static %}
+{% block meta %}
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="{{ gamematch.get_absolute_url }}" />
+  <meta property="og:title" content="{{ gamematch.mapname }}, {{gamematch.player_count}} players" />
+  <meta property="og:description" 
+    content="terrorists {{gamematch.team_red}} specops {{gamematch.team_blue}}" />
+  <meta property="og:description" content="Server: {{ gamematch.hostname }}" />
+{% endblock %}
 {% block styles %}
   {{ block.super }}
   <link rel="stylesheet" type="text/css" href="{% static 'css/game.css' %}" />
@@ -12,7 +20,7 @@
   <header class="highlighted">
     <div class="map"> <em> Map  </em> {{ gamematch.mapname }} </div>
     <div class="hostname"> <em> hostname  </em> 
-      <span data-name="{{gamematch.hostname }}"> </span>
+      <span data-name="{{ gamematch.hostname }}"> </span>
     </div>
     <div class="gametype"> 
       <em> Gametype </em>  <span data-type="{{gamematch.gametype }}"></span>
