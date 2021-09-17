@@ -9,6 +9,8 @@ TCENames.game_section = function () {
   if (this.types_map.has(gametype.dataset.type)) {
     gametype.textContent = this.types_map.get(gametype.dataset.type)
   }
+  var hostname = section.querySelector('header.highlighted .hostname span')
+  this.player_names(hostname)
 }
 
 TCENames.player_section = function () {
