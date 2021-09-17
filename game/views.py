@@ -11,6 +11,21 @@ class GameList(ListView):
         queryset = super(GameList, self).get_queryset()
         return queryset.prefetch_related('gameplayer_set__player').order_by('-id')
 
+    def get_context_data(self, **kwargs):
+        context = super(GameList, self).get_context_data(**kwargs)
+        for game in context['object_list']:
+            game.red_players = []
+            game.blue_players = []
+            game.spectators = []
+            for player in game.gameplayer_set.all():
+                if (player.team == 1):
+                    game.red_players.append(player)
+                elif (player.team ==2):
+                    game.blue_players.append(player)
+                else :
+                    game.spectators.append(player)
+        return context
+
     def get_template_names(self):
         return ['game/list.html', 'list.html']
 
@@ -25,7 +40,18 @@ class GameView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(GameView, self).get_context_data(**kwargs)
-        context['players'] = self.object.gameplayer_set.all()
+        game = context['gamematch']
+        game.red_players = []
+        game.blue_players = []
+        game.spectators = []
+        for player in game.gameplayer_set.all():
+            if (player.team == 1):
+                game.red_players.append(player)
+            elif (player.team ==2):
+                game.blue_players.append(player)
+            else :
+                game.spectators.append(player)
+
         return context
 
 class PlayerView(DetailView):

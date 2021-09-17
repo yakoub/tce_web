@@ -1,9 +1,14 @@
 var TCENames = {}
 
 TCENames.game_section = function () {
-  var table = document.currentScript.previousElementSibling;
-  var names = table.querySelectorAll('td:first-child a')
+  var section = document.currentScript.parentElement;
+  var names = section.querySelectorAll('table td:first-child a')
   names.forEach(this.player_names, TCENames)
+
+  var gametype = section.querySelector('header.highlighted .gametype span')
+  if (this.types_map.has(gametype.dataset.type)) {
+    gametype.textContent = this.types_map.get(gametype.dataset.type)
+  }
 }
 
 TCENames.player_section = function () {
@@ -62,9 +67,17 @@ TCENames.player_names = function (a) {
   }
 }
 
-TCENames.ncodes_setup = function() {
+TCENames.setup = function() {
   var codes = new Map()
   this.ncodes = codes
+
+  var types = new Map()
+  this.types_map = types
+
+  types.set('2', 'CTF')
+  types.set('5', 'Obj')
+  types.set('7', 'BC')
+
   codes.set(':', 'c-c1')
   codes.set(';', 'c-c2')
   codes.set('<', 'c-c3')
@@ -87,4 +100,4 @@ TCENames.ncodes_setup = function() {
   codes.set('–', 'c-c20')
 }
 
-TCENames.ncodes_setup()
+TCENames.setup()

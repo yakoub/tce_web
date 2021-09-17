@@ -8,25 +8,50 @@
 
 {% block body %}
 <section class="game dark-gray">
-  <a class="game-id" href="{{ object.get_absolute_url }}"> [{{object.id}}] </a>
+  <a class="game-id" href="{{ gamematch.get_absolute_url }}"> [{{object.id}}] </a>
   <header class="highlighted">
-    <div class="map"> <em> Map  </em> {{ object.mapname }} </div>
-    <div class="hostname"> <em> hostname  </em> {{object.hostname }} </div>
-    <div class="gametype"> <em> gametype </em>  {{object.gametype }} </div>
+    <div class="map"> <em> Map  </em> {{ gamematch.mapname }} </div>
+    <div class="hostname"> <em> hostname  </em> {{gamematch.hostname }} </div>
+    <div class="gametype"> 
+      <em> Gametype </em>  <span data-type="{{gamematch.gametype }}"></span>
+    </div>
+    <div class="created"> <em> Created </em> 
+      {{game.created|date:"N j, Y /H:i e" }}
+    </div>
   </header>
   <table> 
   <thead> <tr>
-    <th> name </th> <th> team </th> <th> kills  </th> <th> deaths </th>
+    <th> name </th> <th> kills  </th> <th> deaths </th>
     <th> ping </th>
     <th> damange_given</th> <th> damage_recieved </th> <th> score </th>
   </tr> </thead>
   <tbody>
-    {% for player in object.gameplayer_set.all %}
+    <tr> 
+      <th class="highlighted" colspan="7"> <em> specops </em> {{gamematch.team_blue}} </th>
+    </tr>
+    {% for player in gamematch.blue_players %}
       <tr>
       <td> <a data-name="{{ player.player.name }}"
         href="{{ player.player.get_absolute_url }}">
       </a> </td>
-      <td> {{ player.team }} </td>
+      <td> {{ player.kills }} </td>
+      <td> {{ player.deaths }} </td>
+      <td> {{ player.ping }} </td>
+      <td> {{ player.damage_given }} </td>
+      <td> {{ player.damage_recieved }} </td>
+      <td> {{ player.score }} </td>
+      </tr>
+    {% endfor %}
+  </tbody> 
+  <tbody>
+    <tr> 
+      <th class="highlighted" colspan="7"> <em> terrorists </em> {{gamematch.team_red}} </th>
+    </tr>
+    {% for player in gamematch.red_players %}
+      <tr>
+      <td> <a data-name="{{ player.player.name }}"
+        href="{{ player.player.get_absolute_url }}">
+      </a> </td>
       <td> {{ player.kills }} </td>
       <td> {{ player.deaths }} </td>
       <td> {{ player.ping }} </td>
