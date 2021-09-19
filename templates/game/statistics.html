@@ -1,0 +1,38 @@
+<h3> Last 48 hours: </h3>
+{% if top_games %}
+<table class="dark-brown">
+<caption> top games </caption>
+<thead>
+<tr> <th> Game </th> <th> Player Count </th> <th> Created </th></tr>
+</thead>
+  {% for game in top_games %}
+  <tr>
+  <td> <a href="{{ game.get_absolute_url }}">
+    [{{game.id}}] 
+  </a> </td> 
+  <td> {{ game.player_count }} </td>
+  <td> {{ game.created|date:"N  j" }} </td>
+  </tr>
+  {% endfor %}
+</table>
+{% endif %}
+
+{% if top_players %}
+<table class="players dark-gray">
+<caption> leading players </caption>
+<thead>
+<tr> <th> Name </th> <th> Total kills </th> <th> Max kills </th> </tr>
+</head>
+<tbody>
+  {% for player in top_players %}
+  <tr>
+  <td> <a href="{{ player.get_absolute_url }}" data-name="{{ player.name }}">
+  </a> </td> 
+  <td> {{ player.total_kills }} </td>
+  <td> {{ player.max_kills }} </td>
+  </tr>
+  {% endfor %}
+</tbody>
+</table>
+{% endif %}
+<script type="text/javascript"> TCENames.statistics_section() </script>

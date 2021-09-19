@@ -1,6 +1,8 @@
 from django.views.generic import DetailView, ListView
 from django.core.paginator import Paginator
+from django.db.models import Count, Sum, Max
 from .models import GameMatch, GamePlayer, PlayerIndex
+from datetime import datetime, timedelta
 
 class TeamsMixin:
 
@@ -17,7 +19,22 @@ class TeamsMixin:
                 game.spectators.append(player)
         game.player_count = len(game.red_players) + len(game.blue_players)
 
-class GameList(TeamsMixin, ListView):
+class StatisicsMixin:
+    
+    def statistic_context(self, context):
+        start = datetime.now() - timedelta(days=2)
+        context['top_games'] = GameMatch.objects\
+            .filter(created__gt=start)\
+            .annotate(player_count = Count('gameplayer'))\
+                .order_by('-player_count')[:5]
+        context['top_players'] = PlayerIndex.objects\
+            .filter(gameplayer__game__created__gt=start,\
+                gameplayer__game__gametype=5)\
+            .annotate(total_kills = Sum('gameplayer__kills'))\
+            .annotate(max_kills = Max('gameplayer__kills'))\
+            .order_by('-total_kills')[:5]
+
+class GameList(StatisicsMixin, TeamsMixin, ListView):
     
     model = GameMatch
     paginate_by = 5
@@ -30,13 +47,14 @@ class GameList(TeamsMixin, ListView):
         context = super(GameList, self).get_context_data(**kwargs)
         for game in context['object_list']:
             self.teams_context(game) 
+        self.statistic_context(context)
         return context
 
     def get_template_names(self):
         return ['game/list.html', 'list.html']
 
 
-class GameView(TeamsMixin, DetailView):
+class GameView(StatisicsMixin, TeamsMixin, DetailView):
 
     model = GameMatch
     
@@ -47,6 +65,7 @@ class GameView(TeamsMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super(GameView, self).get_context_data(**kwargs)
         self.teams_context(context['gamematch']) 
+        self.statistic_context(context)
         return context
 
 class PlayerView(TeamsMixin, DetailView):

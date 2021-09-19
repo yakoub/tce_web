@@ -19,9 +19,15 @@
 </head>
 <body class="dark-blue">
   <div id="page">
-  <header> <a href="/"> Homepage </a> </header>
-    {% block body %}
+    <main>
+      <header> <a href="/"> Homepage </a> </header>
+    {% block main %}
     {% endblock %}
+    </main>
+    <aside>
+    {% block sidebar %}
+    {% endblock %}
+    </aside>
   </div>
   <!-- pre> {# % debug % #} </pre -->
   <!-- pre> {# {inspect} #} </pre -->

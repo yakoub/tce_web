@@ -14,8 +14,8 @@
   <link rel="stylesheet" type="text/css" href="{% static 'css/game.css' %}" />
 {% endblock %}
 
-{% block body %}
-<section class="game dark-gray">
+{% block main %}
+<article class="game dark-gray">
   <a class="game-id" href="{{ gamematch.get_absolute_url }}"> [{{object.id}}] </a>
   <header class="highlighted">
     <div class="map"> <em> Map  </em> {{ gamematch.mapname }} </div>
@@ -71,7 +71,32 @@
       </tr>
     {% endfor %}
   </tbody> 
+  {% if gamematch.spectators %}
+    <tbody>
+      <tr> 
+        <th class="highlighted" colspan="7"> <em> spectators </em> </th>
+      </tr>
+      {% for player in gamematch.spectators %}
+        <tr>
+        <td> <a data-name="{{ player.player.name }}"
+          href="{{ player.player.get_absolute_url }}">
+        </a> </td>
+        <td> {{ player.kills }} </td>
+        <td> {{ player.deaths }} </td>
+        <td> {{ player.ping }} </td>
+        <td> {{ player.damage_given }} </td>
+        <td> {{ player.damage_recieved }} </td>
+        <td> {{ player.score }} </td>
+        </tr>
+      {% endfor %}
+    </tbody> 
+  {% endif %}
   </table>
+
   <script> TCENames.game_section() </script>
-</section>
-{% endblock body %}
+</article>
+{% endblock main %}
+
+{% block sidebar %}
+  {% include 'game/statistics.html' %}
+{% endblock sidebar %}

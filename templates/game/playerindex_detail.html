@@ -6,7 +6,7 @@
   <link rel="stylesheet" type="text/css" href="{% static 'css/game.css' %}" />
 {% endblock %}
 
-{% block body %}
+{% block main %}
   <section class="player">
     <div> <em> Name </em> <span data-name="{{ object.name }}"> </span> </div>
     {% if alias_list %}
@@ -37,4 +37,4 @@
   </section>
   {% include 'pager.html' with page=game_list %}
 
-{% endblock body %}
+{% endblock main %}

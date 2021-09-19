@@ -21,6 +21,12 @@ TCENames.player_section = function () {
   names.forEach(this.player_names, TCENames)
 }
 
+TCENames.statistics_section = function () {
+  var section = document.currentScript.parentElement;
+  var names = section.querySelectorAll('table.players td:first-child a')
+  names.forEach(this.player_names, TCENames)
+}
+
 TCENames.player_names = function (a) {
   let name = a.dataset.name
   let name_html = window.localStorage.getItem('name-html-' + name)
@@ -73,6 +79,12 @@ TCENames.setup = function() {
   var codes = new Map()
   this.ncodes = codes
 
+  if (!window.localStorage.getItem('version1')) {
+    window.localStorage.setItem('version1', '#')
+    window.localStorage.removeItem('name-html-^.Chucky<3')
+    console.log('version1 done');
+  }
+
   var types = new Map()
   this.types_map = types
 
@@ -100,6 +112,8 @@ TCENames.setup = function() {
   codes.set('+', 'c-c18')
   codes.set(',', 'c-c19')
   codes.set('–', 'c-c20')
+  
+  codes.set('.', 'c-w')
 }
 
 TCENames.setup()

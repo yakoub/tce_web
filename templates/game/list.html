@@ -6,8 +6,8 @@
   <link rel="stylesheet" type="text/css" href="{% static 'css/game.css' %}" />
 {% endblock %}
 
-{% block body %}
-  <section class="list">
+{% block main %}
+  <section class="list game-list">
     {% block list_header %}
     {% endblock %}
 
@@ -22,5 +22,8 @@
     {% endblock %}
   </section>
   {% include 'pager.html' with page=page_obj %}
-{% endblock body %}
+{% endblock main %}
 
+{% block sidebar %}
+  {% include 'game/statistics.html' %}
+{% endblock sidebar %}
