@@ -14,12 +14,19 @@
 
   {% block scripts_head %}
     <script type="text/javascript" src="{% static 'js/game.js' %}"> </script>
+    <script type="text/javascript" src="{% static 'js/mobile-toggle.js' %}"> </script>
   {% endblock %}
 
 </head>
 <body class="dark-blue">
   <div id="page">
-    <nav> <a href="/"> Homepage </a> </nav>
+    <nav> 
+      <a href="/"> Homepage </a>
+      <select>
+        <option selected value="scores"> Scores </option> 
+        <option value="stats"> Statistics </option>
+      </select>
+    </nav>
     <main>
     {% block main %}
     {% endblock %}
