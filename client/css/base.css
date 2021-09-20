@@ -22,7 +22,7 @@ body {
     padding: 0.5rem 0;
     text-align: center;
   }
-  #page > nav select {
+  #page > nav label {
     display: none;
   }
 }
