@@ -9,16 +9,7 @@
 {% block main %}
   <section class="player">
     <div> <em> Name </em> <span data-name="{{ object.name }}"> </span> </div>
-    {% if alias_list %}
-    <div> <em>  Aliases: </em> </div>
-    <ul class="aliases">
-      {% for player in alias_list %}
-      <li> <a data-name="{{ player.name }}" href="{{ player.get_absolute_url }}">
-      </a> </li>
-      {% endfor %}
-    </ul>
-    {% endif %}
-    <script> TCENames.player_section() </script>
+    <script> TCENames.player_page() </script>
   </section>
   <section class="list">
     {% block list_header %}
@@ -38,3 +29,7 @@
   {% include 'pager.html' with page=game_list %}
 
 {% endblock main %}
+
+{% block sidebar %}
+  {% include 'game/player_statistics.html' %}
+{% endblock sidebar %}

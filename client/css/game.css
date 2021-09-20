@@ -13,13 +13,6 @@
   font-weight: bolder;
 }
 
-.game table {
-  text-align: center;
-}
-.game table td:first-child {
-  text-align: left;
-}
-
 .game thead th {
   max-width: 6em;
 }

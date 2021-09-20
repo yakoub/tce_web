@@ -13,12 +13,16 @@ TCENames.game_section = function () {
   this.player_names(hostname)
 }
 
-TCENames.player_section = function () {
+TCENames.player_statistics = function () {
+  var section = document.currentScript.parentElement;
+  var names = section.querySelectorAll('ul.aliases a')
+  names.forEach(this.player_names, TCENames)
+}
+
+TCENames.player_page = function () {
   var section = document.currentScript.parentElement;
   var current_name = section.querySelector('div span[data-name]')
   this.player_names(current_name)
-  var names = section.querySelectorAll('ul.aliases a')
-  names.forEach(this.player_names, TCENames)
 }
 
 TCENames.statistics_section = function () {

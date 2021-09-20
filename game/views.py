@@ -80,6 +80,16 @@ class PlayerView(TeamsMixin, DetailView):
 
     model = PlayerIndex
 
+    top_sql = """
+        select gp.kills, gp.match_id, pi.id
+        from player_index pi
+        inner join game_player gp on pi.id = gp.player_id
+        inner join game_match gm on gm.id = gp.match_id
+        where pi.guid = %s and gm.gametype = 5
+        order by gp.kills desc
+        limit 5
+    """
+
     def get_context_data(self, **kwargs):
         context = super(PlayerView, self).get_context_data(**kwargs)
         game_list = GameMatch.objects\
@@ -97,5 +107,7 @@ class PlayerView(TeamsMixin, DetailView):
             .filter(guid = self.object.guid)\
             .exclude(guid = '#')\
             .exclude(id = self.object.id).all()
+
+        context['top_games'] = PlayerIndex.objects.raw(self.top_sql, [self.object.guid])
         return context
 

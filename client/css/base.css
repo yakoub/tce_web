@@ -78,6 +78,12 @@ table {
   text-align: center;
 }
 
+table td:first-child {
+  text-align: left;
+}
+
+table
+
 /* pager */
 
 nav.pager ul {
