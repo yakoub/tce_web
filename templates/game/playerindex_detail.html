@@ -7,13 +7,10 @@
 {% endblock %}
 
 {% block main %}
-  <section class="player">
-    <div> <em> Name </em> <span data-name="{{ object.name }}"> </span> </div>
-    <script> TCENames.player_page() </script>
-  </section>
   <section class="list">
     {% block list_header %}
-    <header> Games: </header>
+    <header> <em> Name </em> <span data-name="{{ object.name }}"> </span> </header>
+    <script> TCENames.player_page() </script>
     {% endblock %}
 
     {% block list_items %}

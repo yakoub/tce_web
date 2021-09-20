@@ -26,7 +26,7 @@ class StatisticsMixin:
         from player_index pi
         inner join game_player gp on gp.player_id = pi.id
         inner join game_match gm on gm.id = gp.match_id
-        where gm.id > %s and gm.gametype = 5
+        where gm.id > %s and gm.gametype = 5 and pi.guid != '#'
         group by pi.guid
         order by total_kills desc
         limit 5

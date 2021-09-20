@@ -1,4 +1,4 @@
-.game {
+li .game {
   margin-top: 0.5rem;
 }
 
@@ -27,6 +27,28 @@ ul.aliases a,
   font-weight: bolder;
 }
 
+section.player-top-games,
+section.aliases {
+  margin-top: 1.6rem;
+  padding: 1rem;
+}
+
+section.statistics {
+  padding: 1rem;
+}
+
+section.statistics table {
+  width: 100%;
+  margin-top: 2rem;
+  font-size: 0.8rem;
+}
+
+section.statistics h3,
+section.aliases h3 {
+  margin: 0;
+  padding: 0.5rem;
+}
+
 @media (min-width: 1025px) {
   .game header {
     grid-template-columns: 1fr 2fr;
@@ -45,13 +67,18 @@ ul.aliases a,
 
 @media (min-width: 621px) {
   .game {
-    padding: 1rem;
-    margin: 1em 0;
+    padding: 1em;
     border-radius: 8px;
+  }
+  li .game {
+    margin: 1em 0;
+  }
+  ul li:first-child .game {
+    margin-top: 0;
   }
 
   .game header {
-    padding: 0.5em;
+    padding: 0.5rem;
   }
   .game-list li {
     border-radius: 8px;
