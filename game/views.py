@@ -80,12 +80,22 @@ class PlayerView(TeamsMixin, DetailView):
 
     model = PlayerIndex
 
-    top_sql = """
+    top_sql_guid = """
         select gp.kills, gp.match_id, pi.id
         from player_index pi
         inner join game_player gp on pi.id = gp.player_id
         inner join game_match gm on gm.id = gp.match_id
         where pi.guid = %s and gm.gametype = 5
+        order by gp.kills desc
+        limit 5
+    """
+
+    top_sql_id = """
+        select gp.kills, gp.match_id, pi.id
+        from player_index pi
+        inner join game_player gp on pi.id = gp.player_id
+        inner join game_match gm on gm.id = gp.match_id
+        where pi.id = %s and gm.gametype = 5
         order by gp.kills desc
         limit 5
     """
@@ -108,6 +118,12 @@ class PlayerView(TeamsMixin, DetailView):
             .exclude(guid = '#')\
             .exclude(id = self.object.id).all()
 
-        context['top_games'] = PlayerIndex.objects.raw(self.top_sql, [self.object.guid])
+        if (self.object.guid != '#') :
+            context['top_games'] = PlayerIndex.objects\
+                .raw(self.top_sql_guid, [self.object.guid])
+        else :
+            context['top_games'] = PlayerIndex.objects\
+                .raw(self.top_sql_id, [self.object.id])
+
         return context
 
