@@ -1,0 +1,27 @@
+{% if alias_list %}
+<h3>  Aliases: </h3>
+<ul class="aliases">
+  {% for player in alias_list %}
+  <li> <a data-name="{{ player.name }}" href="{{ player.get_absolute_url }}">
+  </a> </li>
+  {% endfor %}
+</ul>
+<script type="text/javascript"> TCENames.player_statistics() </script>
+{% endif %}
+{% if top_games %}
+<h3> top games: </h3>
+<table>
+<thead> <tr> <th> Game </th> <th> Kills </th> </tr> </thead>
+<tbody>
+{% for player in top_games %}
+<tr>
+  <td> <a href="{% url 'game:game-view' player.match_id %}">
+    [{{ player.match_id }}] 
+  </a> </td>
+  <td> {{ player.kills }} </td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+{% endif %}
+
