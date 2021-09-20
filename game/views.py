@@ -19,22 +19,30 @@ class TeamsMixin:
                 game.spectators.append(player)
         game.player_count = len(game.red_players) + len(game.blue_players)
 
-class StatisicsMixin:
+class StatisticsMixin:
+    players_sql = """
+        select pi.id, pi.name
+        , sum(gp.kills) as total_kills, max(gp.kills) as max_kills
+        from player_index pi
+        inner join game_player gp on gp.player_id = pi.id
+        inner join game_match gm on gm.id = gp.match_id
+        where gm.id > %s and gm.gametype = 5
+        group by pi.guid
+        order by total_kills desc
+        limit 5
+    """
     
     def statistic_context(self, context):
-        start = datetime.now() - timedelta(days=2)
+        last_id = GameMatch.objects.aggregate(id = Max('id'))
+        since_id = last_id['id'] - 500
+
         context['top_games'] = GameMatch.objects\
-            .filter(created__gt=start)\
+            .filter(id__gt=since_id)\
             .annotate(player_count = Count('gameplayer'))\
                 .order_by('-player_count')[:5]
-        context['top_players'] = PlayerIndex.objects\
-            .filter(gameplayer__game__created__gt=start,\
-                gameplayer__game__gametype=5)\
-            .annotate(total_kills = Sum('gameplayer__kills'))\
-            .annotate(max_kills = Max('gameplayer__kills'))\
-            .order_by('-total_kills')[:5]
+        context['top_players'] = PlayerIndex.objects.raw(self.players_sql, [since_id])
 
-class GameList(StatisicsMixin, TeamsMixin, ListView):
+class GameList(StatisticsMixin, TeamsMixin, ListView):
     
     model = GameMatch
     paginate_by = 5
@@ -54,7 +62,7 @@ class GameList(StatisicsMixin, TeamsMixin, ListView):
         return ['game/list.html', 'list.html']
 
 
-class GameView(StatisicsMixin, TeamsMixin, DetailView):
+class GameView(StatisticsMixin, TeamsMixin, DetailView):
 
     model = GameMatch
     
