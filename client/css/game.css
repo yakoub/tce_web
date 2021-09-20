@@ -29,12 +29,14 @@ ul.aliases a,
 
 section.player-top-games,
 section.aliases {
-  margin-top: 1.6rem;
+  margin-top: 1.1rem;
   padding: 1rem;
+  border-radius: 8px;
 }
 
 section.statistics {
   padding: 1rem;
+  border-radius: 8px;
 }
 
 section.statistics table {
