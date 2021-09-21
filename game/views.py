@@ -86,6 +86,7 @@ class GameList(BrowserMixin, StatisticsMixin, TeamsMixin, ListView):
         self.statistic_context(context)
         self.browse_form(context)
         self.pager_links(context)
+        context['og_url'] = self.request.build_absolute_uri()
 
         return context
 
