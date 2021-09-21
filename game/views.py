@@ -103,6 +103,8 @@ class GameView(StatisticsMixin, TeamsMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(GameView, self).get_context_data(**kwargs)
+        context['og_url'] = self.request\
+            .build_absolute_uri(self.object.get_absolute_url())
         self.teams_context(context['gamematch']) 
         self.statistic_context(context)
         return context
