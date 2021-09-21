@@ -72,7 +72,7 @@ class StatisticsMixin:
 class GameList(BrowserMixin, StatisticsMixin, TeamsMixin, ListView):
     
     model = GameMatch
-    paginate_by = 5
+    paginate_by = 10
 
     def get_queryset(self):
         queryset = super(GameList, self).get_queryset()

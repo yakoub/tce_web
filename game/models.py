@@ -22,6 +22,7 @@ class GameMatch(models.Model):
 class PlayerIndex(models.Model):
     guid = models.CharField('guid', max_length=32)
     name = models.CharField('Name', max_length=64)
+    name_plain = models.CharField('Name plain', max_length=64)
 
     def get_absolute_url(self):
         return reverse('game:player-view', kwargs={'pk': self.pk})
