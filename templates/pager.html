@@ -1,12 +1,12 @@
 <nav class="pager">
   <ul>
   {% if page.has_previous %}
-    <li> <a href = "?page={{ page.previous_page_number }}"> previous 
+    <li> <a href = "?{{ previous_page_params }}"> previous 
     </a> </li>
   {% endif %}
   <li> page {{ page.number }} out of {{ page.paginator.num_pages }} </li>
   {% if page.has_next %}
-    <li> <a href = "?page={{ page.next_page_number }}"> next 
+    <li> <a href = "?{{ next_page_params }}"> next 
     </a> </li>
   {% endif %}
 

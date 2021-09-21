@@ -1,8 +1,35 @@
 from django.views.generic import DetailView, ListView
 from django.core.paginator import Paginator
 from django.db.models import Count, Sum, Max
-from .models import GameMatch, GamePlayer, PlayerIndex
 from datetime import datetime, timedelta
+from .models import GameMatch, GamePlayer, PlayerIndex
+from .forms import GameBrowser
+
+class BrowserMixin:
+
+    def browse_form(self, context):
+        if ('start' in self.request.GET):
+            context['browse_form'] = GameBrowser(self.request.GET)
+        else:
+            context['browse_form'] = GameBrowser()
+
+    def browse_query(self, queryset):
+        if ('start' in self.request.GET):
+            start = self.request.GET['start'] + ' 00:00:00'
+            end = self.request.GET['end'] + ' 23:59:59'
+            queryset = queryset.filter(created__gte=start, created__lte=end)
+        return queryset
+
+    def pager_links(self, context):
+        get_params = self.request.GET.copy()
+        page_obj = context['page_obj']
+        if (page_obj.has_previous()):
+            get_params['page'] = context['page_obj'].previous_page_number()
+            context['previous_page_params'] = get_params.urlencode()
+        if (page_obj.has_next()):
+            get_params['page'] = context['page_obj'].next_page_number()
+            context['next_page_params'] = get_params.urlencode()
+
 
 class TeamsMixin:
 
@@ -42,20 +69,24 @@ class StatisticsMixin:
                 .order_by('-player_count')[:5]
         context['top_players'] = PlayerIndex.objects.raw(self.players_sql, [since_id])
 
-class GameList(StatisticsMixin, TeamsMixin, ListView):
+class GameList(BrowserMixin, StatisticsMixin, TeamsMixin, ListView):
     
     model = GameMatch
     paginate_by = 5
 
     def get_queryset(self):
         queryset = super(GameList, self).get_queryset()
-        return queryset.prefetch_related('gameplayer_set__player').order_by('-id')
+        queryset = queryset.prefetch_related('gameplayer_set__player').order_by('-id')
+        return self.browse_query(queryset)
 
     def get_context_data(self, **kwargs):
         context = super(GameList, self).get_context_data(**kwargs)
         for game in context['object_list']:
             self.teams_context(game) 
         self.statistic_context(context)
+        self.browse_form(context)
+        self.pager_links(context)
+
         return context
 
     def get_template_names(self):
@@ -76,7 +107,7 @@ class GameView(StatisticsMixin, TeamsMixin, DetailView):
         self.statistic_context(context)
         return context
 
-class PlayerView(TeamsMixin, DetailView):
+class PlayerView(BrowserMixin, TeamsMixin, DetailView):
 
     model = PlayerIndex
 
@@ -105,13 +136,17 @@ class PlayerView(TeamsMixin, DetailView):
         game_list = GameMatch.objects\
             .filter(gameplayer__player_id = self.object.id)\
             .prefetch_related('gameplayer_set__player')\
-            .order_by('-id').all()
+            .order_by('-id')
+        game_list = self.browse_query(game_list).all()
 
         paginator = Paginator(game_list, 10)
         page_number = self.request.GET.get('page')
         context['game_list'] = paginator.get_page(page_number)
         for game in context['game_list']:
             self.teams_context(game) 
+        self.browse_form(context)
+        context['page_obj'] = context['game_list']
+        self.pager_links(context)
 
         context['alias_list'] = PlayerIndex.objects\
             .filter(guid = self.object.guid)\

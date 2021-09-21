@@ -31,12 +31,12 @@ section.player-top-games,
 section.aliases {
   margin-top: 1.1rem;
   padding: 1rem;
-  border-radius: 8px;
+  border-radius: 0.4rem;
 }
 
 section.statistics {
   padding: 1rem;
-  border-radius: 8px;
+  border-radius: 0.4rem;
 }
 
 section.statistics table {
@@ -70,7 +70,7 @@ section.aliases h3 {
 @media (min-width: 621px) {
   .game {
     padding: 1em;
-    border-radius: 8px;
+    border-radius: 0.4rem;
   }
   li .game {
     margin: 1em 0;
@@ -83,7 +83,7 @@ section.aliases h3 {
     padding: 0.5rem;
   }
   .game-list li {
-    border-radius: 8px;
+    border-radius: 0.4rem;
   }
 }
 

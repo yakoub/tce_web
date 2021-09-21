@@ -13,6 +13,11 @@
     <script> TCENames.player_page() </script>
     {% endblock %}
 
+    <form class="dark-gray" name="game-browser" method="get">
+      {{ browse_form }}
+      <input type="submit" value="browse">
+      <a href="."> Clear </a>
+    </form>
     {% block list_items %}
       <ul class="top alternating">
       {% for game in game_list %}

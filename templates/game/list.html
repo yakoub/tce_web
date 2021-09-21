@@ -7,6 +7,11 @@
 {% endblock %}
 
 {% block main %}
+  <form class="dark-gray" name="game-browser" method="get">
+    {{ browse_form }}
+    <input type="submit" value="browse">
+    <a href="."> Clear </a>
+  </form>
   <section class="list game-list">
     {% block list_header %}
     {% endblock %}

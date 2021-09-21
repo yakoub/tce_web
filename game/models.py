@@ -2,7 +2,7 @@ from django.db import models
 from django.urls import reverse
 
 class GameMatch(models.Model):
-    created = models.DateField('Created')
+    created = models.DateTimeField('Created')
     mapname = models.CharField('Mapname', max_length=64)
     hostname = models.CharField('Hostname', max_length=64)
     team_red = models.SmallIntegerField('Terrorist')

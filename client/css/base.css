@@ -106,8 +106,6 @@ table td:first-child {
   text-align: left;
 }
 
-table
-
 /* pager */
 
 nav.pager ul {
@@ -117,4 +115,11 @@ nav.pager ul {
   justify-content: space-between;
   margin: 0;
   padding: 0;
+}
+
+/* browser form */
+form[name="game-browser"] {
+  padding: 0.8rem 1rem;
+  margin-bottom: 1rem;
+  border-radius: 0.4rem;
 }
