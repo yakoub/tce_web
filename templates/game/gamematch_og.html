@@ -5,5 +5,6 @@
   {{ player.player.name }}, kills: {{ player.kills }} {% endfor %}
 {% if gamematch.spectators %}
 [spectators] {% for player in gamematch.spectators %}
-  {{ player.player.name }} {% endfor %}
-{% endif %}
+  {{ player.player.name }} {% endfor %} {% endif %}
+[Host] {{ gamematch.hostname }}
+[Date] {{ gamematch.created|date:"N j, Y /H:i e" }}
