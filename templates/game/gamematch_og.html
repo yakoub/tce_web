@@ -1,0 +1,9 @@
+
+[terrorists] {% for player in gamematch.red_players %}
+  {{ player.player.name }}, kills: {{ player.kills }} {% endfor %}
+[specops] {% for player in gamematch.blue_players %}
+  {{ player.player.name }}, kills: {{ player.kills }} {% endfor %}
+{% if gamematch.spectators %}
+[spectators] {% for player in gamematch.spectators %}
+  {{ player.player.name }} {% endfor %}
+{% endif %}
