@@ -1,6 +1,6 @@
-from django.views.generic import DetailView, ListView
+from django.views.generic import DetailView, ListView, TemplateView
 from django.core.paginator import Paginator
-from django.db.models import Count, Sum, Max
+from django.db.models import Count, Sum, Max, Q
 from datetime import datetime, timedelta
 from .models import GameMatch, GamePlayer, PlayerIndex
 from .forms import GameBrowser
@@ -47,27 +47,31 @@ class TeamsMixin:
         game.player_count = len(game.red_players) + len(game.blue_players)
 
 class StatisticsMixin:
-    players_sql = """
-        select pi.id, pi.name
-        , sum(gp.kills) as total_kills, max(gp.kills) as max_kills
-        from player_index pi
-        inner join game_player gp on gp.player_id = pi.id
-        inner join game_match gm on gm.id = gp.match_id
-        where gm.id > %s and gm.gametype = 5 and pi.guid != '#'
-        group by pi.guid
-        order by total_kills desc
-        limit 5
-    """
+
+    top_games_qs = GameMatch.objects
+    QtopGames = Q(gameplayer__team__lt=3)
+    def top_games_annotate(self, qs):
+        return qs.annotate(player_count = Count('gameplayer'))\
+            .order_by('-player_count')
+
+    top_players_qs = PlayerIndex.objects
+    QtopPlayers = Q(gameplayer__game__gametype=5)
+    def top_players_annotate(self, qs):
+        return qs.annotate(total_kills = Sum('gameplayer__kills'))\
+            .annotate(max_kills = Max('gameplayer__kills'))\
+            .order_by('-max_kills')
     
-    def statistic_context(self, context):
+    def statistic_500_context(self, context):
         last_id = GameMatch.objects.aggregate(id = Max('id'))
         since_id = last_id['id'] - 500
+        context['statistics_title'] = 'Last 500 games'
 
-        context['top_games'] = GameMatch.objects\
-            .filter(id__gt=since_id)\
-            .annotate(player_count = Count('gameplayer'))\
-                .order_by('-player_count')[:5]
-        context['top_players'] = PlayerIndex.objects.raw(self.players_sql, [since_id])
+        qs = self.top_games_qs.filter(self.QtopGames & Q(id__gt=since_id))
+        context['top_games'] = self.top_games_annotate(qs)[:5]
+
+        qs = self.top_players_qs\
+            .filter(self.QtopPlayers & Q(gameplayer__game__id__gt=since_id))
+        context['top_players'] = self.top_players_annotate(qs)[:5]
 
 class GameList(BrowserMixin, StatisticsMixin, TeamsMixin, ListView):
     
@@ -83,7 +87,7 @@ class GameList(BrowserMixin, StatisticsMixin, TeamsMixin, ListView):
         context = super(GameList, self).get_context_data(**kwargs)
         for game in context['object_list']:
             self.teams_context(game) 
-        self.statistic_context(context)
+        self.statistic_500_context(context)
         self.browse_form(context)
         self.pager_links(context)
         context['og_url'] = self.request.build_absolute_uri()
@@ -107,32 +111,14 @@ class GameView(StatisticsMixin, TeamsMixin, DetailView):
         context['og_url'] = self.request\
             .build_absolute_uri(self.object.get_absolute_url())
         self.teams_context(context['gamematch']) 
-        self.statistic_context(context)
+        self.statistic_500_context(context)
         return context
 
 class PlayerView(BrowserMixin, TeamsMixin, DetailView):
 
     model = PlayerIndex
 
-    top_sql_guid = """
-        select gp.kills, gp.match_id, pi.id
-        from player_index pi
-        inner join game_player gp on pi.id = gp.player_id
-        inner join game_match gm on gm.id = gp.match_id
-        where pi.guid = %s and gm.gametype = 5
-        order by gp.kills desc
-        limit 5
-    """
-
-    top_sql_id = """
-        select gp.kills, gp.match_id, pi.id
-        from player_index pi
-        inner join game_player gp on pi.id = gp.player_id
-        inner join game_match gm on gm.id = gp.match_id
-        where pi.id = %s and gm.gametype = 5
-        order by gp.kills desc
-        limit 5
-    """
+    slug_field = 'id'
 
     def get_context_data(self, **kwargs):
         context = super(PlayerView, self).get_context_data(**kwargs)
@@ -156,12 +142,30 @@ class PlayerView(BrowserMixin, TeamsMixin, DetailView):
             .exclude(guid = '#')\
             .exclude(id = self.object.id).all()
 
-        if (self.object.guid != '#') :
-            context['top_games'] = PlayerIndex.objects\
-                .raw(self.top_sql_guid, [self.object.guid])
-        else :
-            context['top_games'] = PlayerIndex.objects\
-                .raw(self.top_sql_id, [self.object.id])
-
+        self.top_games(context)
         return context
 
+    def top_games(context):
+        queryset = GamePlayer.objects.filter(game__gametype=5)\
+            .order_by('-kills')
+        if (self.object.guid != '#') :
+            queryset = queryset.filter(player__guid=self.object.guid)
+        else :
+            queryset = queryset.filter(player=self.object.id)
+        context['top_games'] = queryset[:5]
+
+class Statistics(StatisticsMixin, TemplateView):
+
+    template_name = "game/statistics_total.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['statistics_title'] = 'Total statistics'
+
+        qs = self.top_games_qs.filter(self.QtopGames)
+        context['top_games'] = self.top_games_annotate(qs)[:10]
+
+        qs = self.top_players_qs.filter(self.QtopPlayers)
+        context['top_players'] = self.top_players_annotate(qs)[:10]
+
+        return context

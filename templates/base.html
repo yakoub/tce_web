@@ -21,7 +21,8 @@
 <body class="dark-blue">
   <div id="page">
     <nav> 
-      <a href="/"> Homepage </a>
+      <a href="{% url 'game:game-scores' %}"> Scores </a>
+      <a href="{% url 'game:game-stats' %}"> Statistics </a>
       <label> Switch to :
         <select>
           <option selected value="scores"> Scores </option> 

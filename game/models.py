@@ -20,12 +20,13 @@ class GameMatch(models.Model):
         managed = False
 
 class PlayerIndex(models.Model):
-    guid = models.CharField('guid', max_length=32)
+    guid = models.CharField('guid', max_length=32, primary_key = True)
+    id = models.IntegerField('id', unique=True)
     name = models.CharField('Name', max_length=64)
     name_plain = models.CharField('Name plain', max_length=64)
 
     def get_absolute_url(self):
-        return reverse('game:player-view', kwargs={'pk': self.pk})
+        return reverse('game:player-view', kwargs={'slug': self.id})
 
     class Meta:
         db_table = 'player_index'
@@ -37,6 +38,7 @@ class GamePlayer(models.Model):
     idx = models.SmallIntegerField('Idx', primary_key = True)
     team = models.SmallIntegerField('Team')
     player = models.ForeignKey(PlayerIndex, db_column='player_id',
+        to_field='id',
         on_delete=models.DO_NOTHING)
     ping = models.SmallIntegerField('Ping')
     score = models.SmallIntegerField('Score')
