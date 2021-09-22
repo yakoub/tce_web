@@ -1,5 +1,11 @@
 {% extends "base.html" %}
 
+{% load static %}
+{% block styles %}
+  {{ block.super }}
+  <link rel="stylesheet" type="text/css" href="{% static 'css/game.css' %}" />
+{% endblock styles %}
+
 {% block main %}
   {% include 'game/statistics.html' %}
 {% endblock main %}

@@ -18,8 +18,8 @@
     <tbody>
     {% for player in top_games %}
     <tr>
-      <td> <a href="{% url 'game:game-view' player.match_id %}">
-        [{{ player.match_id }}] 
+      <td> <a href="{% url 'game:game-view' player.game.id %}">
+        [{{ player.game.id }}] 
       </a> </td>
       <td> {{ player.kills }} </td>
     </tr>

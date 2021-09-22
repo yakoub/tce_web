@@ -59,7 +59,7 @@ class StatisticsMixin:
     def top_players_annotate(self, qs):
         return qs.annotate(total_kills = Sum('gameplayer__kills'))\
             .annotate(max_kills = Max('gameplayer__kills'))\
-            .order_by('-max_kills')
+            .order_by('-total_kills')
     
     def statistic_500_context(self, context):
         last_id = GameMatch.objects.aggregate(id = Max('id'))
@@ -145,7 +145,7 @@ class PlayerView(BrowserMixin, TeamsMixin, DetailView):
         self.top_games(context)
         return context
 
-    def top_games(context):
+    def top_games(self, context):
         queryset = GamePlayer.objects.filter(game__gametype=5)\
             .order_by('-kills')
         if (self.object.guid != '#') :
