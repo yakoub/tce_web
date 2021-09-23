@@ -1,10 +1,21 @@
 from django.db import models
 from django.urls import reverse
 
+class GameServer(models.Model):
+    hostname = models.CharField('Hostname', max_length=64)
+    hostname_plain = models.CharField('Hostname plain', max_length=64)
+    ip = models.CharField('IP', max_length=64)
+    port = models.IntegerField('Port')
+
+    class Meta:
+        db_table = 'game_server'
+        managed = False
+
 class GameMatch(models.Model):
     created = models.DateTimeField('Created')
     mapname = models.CharField('Mapname', max_length=64)
-    hostname = models.CharField('Hostname', max_length=64)
+    server = models.ForeignKey(GameServer, db_column='server_id',
+        on_delete=models.DO_NOTHING)
     team_red = models.SmallIntegerField('Terrorist')
     team_blue = models.SmallIntegerField('Specops')
     gametype = models.SmallIntegerField('Gametype')

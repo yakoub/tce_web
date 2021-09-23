@@ -58,12 +58,13 @@ class StatisticsMixin:
     QtopPlayers = Q(gameplayer__game__gametype=5)
     def top_players_annotate(self, qs):
         return qs.annotate(total_kills = Sum('gameplayer__kills'))\
-            .annotate(max_kills = Max('gameplayer__kills'))\
+            .annotate(total_deaths = Sum('gameplayer__deaths'))\
+            .annotate(total_score = Sum('gameplayer__score'))\
             .order_by('-total_kills')
     
     def statistic_500_context(self, context):
         last_id = GameMatch.objects.aggregate(id = Max('id'))
-        since_id = last_id['id'] - 500
+        since_id = (last_id['id'] - 500) if last_id['id'] else 0
         context['statistics_title'] = 'Last 500 games'
 
         qs = self.top_games_qs.filter(self.QtopGames & Q(id__gt=since_id))
@@ -80,7 +81,8 @@ class GameList(BrowserMixin, StatisticsMixin, TeamsMixin, ListView):
 
     def get_queryset(self):
         queryset = super(GameList, self).get_queryset()
-        queryset = queryset.prefetch_related('gameplayer_set__player').order_by('-id')
+        queryset = queryset.prefetch_related('gameplayer_set__player')\
+            .prefetch_related('server').order_by('-id')
         return self.browse_query(queryset)
 
     def get_context_data(self, **kwargs):
@@ -104,7 +106,8 @@ class GameView(StatisticsMixin, TeamsMixin, DetailView):
     
     def get_queryset(self):
         queryset = super(GameView, self).get_queryset()
-        return queryset.prefetch_related('gameplayer_set__player')
+        return queryset.prefetch_related('gameplayer_set__player')\
+            .prefetch_related('server')
 
     def get_context_data(self, **kwargs):
         context = super(GameView, self).get_context_data(**kwargs)
@@ -125,6 +128,7 @@ class PlayerView(BrowserMixin, TeamsMixin, DetailView):
         game_list = GameMatch.objects\
             .filter(gameplayer__player_id = self.object.id)\
             .prefetch_related('gameplayer_set__player')\
+            .prefetch_related('server')\
             .order_by('-id')
         game_list = self.browse_query(game_list).all()
 

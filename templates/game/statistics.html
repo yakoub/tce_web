@@ -1,5 +1,25 @@
 <section class="statistics dark-brown">
   <h3> {{ statistics_title }}: </h3>
+  {% if top_players %}
+  <table class="players">
+  <caption class="highlighted"> leading players </caption>
+  <thead>
+  <tr> <th> Name </th> <th> Kills </th> <th> Deaths </th> <th> Score </th> </tr>
+  </head>
+  <tbody>
+    {% for player in top_players %}
+    <tr>
+    <td> <a href="{{ player.get_absolute_url }}" data-name="{{ player.name }}">
+    </a> </td> 
+    <td> {{ player.total_kills }} </td>
+    <td> {{ player.total_deaths }} </td>
+    <td> {{ player.total_score }} </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+  </table>
+  {% endif %}
+
   {% if top_games %}
   <table>
   <caption class="highlighted"> top games </caption>
@@ -18,23 +38,6 @@
   </table>
   {% endif %}
 
-  {% if top_players %}
-  <table class="players">
-  <caption class="highlighted"> leading players </caption>
-  <thead>
-  <tr> <th> Name </th> <th> Total kills </th> <th> Max kills </th> </tr>
-  </head>
-  <tbody>
-    {% for player in top_players %}
-    <tr>
-    <td> <a href="{{ player.get_absolute_url }}" data-name="{{ player.name }}">
-    </a> </td> 
-    <td> {{ player.total_kills }} </td>
-    <td> {{ player.max_kills }} </td>
-    </tr>
-    {% endfor %}
-  </tbody>
-  </table>
-  {% endif %}
+
   <script type="text/javascript"> TCENames.statistics_section() </script>
 </section>
