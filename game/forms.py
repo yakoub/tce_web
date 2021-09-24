@@ -19,8 +19,16 @@ class GameBrowser(forms.Form):
     end = forms.DateTimeField(label='End time', required=False,\
         widget=forms.DateInput(attrs={'type': 'date'})\
         )
-    server = forms.TypedChoiceField(label="Server", required=False,\
+    server = forms.TypedChoiceField(label='Server', required=False,\
         coerce=int, empty_value=-1\
         )
+    submit_label = 'browse'
 
-
+class StatisticsFilter(forms.Form):
+    start = forms.DateTimeField(label='Start time', required=False,\
+        widget=forms.DateInput(attrs={'type': 'date'})\
+        )
+    end = forms.DateTimeField(label='End time', required=False,\
+        widget=forms.DateInput(attrs={'type': 'date'})\
+        )
+    submit_label = 'filter'

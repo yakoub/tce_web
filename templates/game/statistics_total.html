@@ -9,3 +9,7 @@
 {% block main %}
   {% include 'game/statistics.html' %}
 {% endblock main %}
+
+{% block sidebar %}
+  {% include 'form.html' with form=filter_form %}
+{% endblock sidebar %}

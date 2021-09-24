@@ -2,12 +2,12 @@ from django.views.generic import DetailView, ListView, TemplateView
 from django.core.paginator import Paginator
 from django.db.models import Count, Sum, Max, Q
 from .models import GameMatch, GamePlayer, PlayerIndex
-from .forms import GameBrowser
+from .forms import GameBrowser, StatisticsFilter
 
 class BrowserMixin:
     
     def browse_dispatch(self, request):
-        GET = self.request.GET
+        GET = request.GET
         self.Qfilters = None
         if ('start' in GET):
             self.browse_form = GameBrowser(GET)
@@ -184,14 +184,49 @@ class Statistics(StatisticsMixin, TemplateView):
 
     template_name = "game/statistics_total.html"
 
+    def dispatch(self, request, *args, **kwargs):
+        GET = request.GET
+        self.QtopGamesExtra = None
+        self.QtopPlayersExtra = None
+        if ('start' in GET):
+            self.filter_form = StatisticsFilter(GET)
+            form = self.filter_form
+            if form.is_valid():
+                Qgames = None
+                Qplayers = None
+                if (form.cleaned_data['start']):
+                    start = form.cleaned_data['start'].replace(hour=0, minute=0, second=0)
+                    Qgames = Q(created__gte=start)
+                    Qplayers = Q(gameplayer__game__created__gte=start)
+                if (form.cleaned_data['end']):
+                    end = form.cleaned_data['end'].replace(hour=23, minute=59, second=59)
+                    Qend = Q(created__lte=end)
+                    Qgames = Qgames & Qend if Qgames else Qend
+                    Qend = Q(gameplayer__game__created__lte=end)
+                    Qplayers = Qplayers & Qend if Qplayers else Qend
+
+                self.QtopGamesExtra = Qgames
+                self.QtopPlayersExtra = Qplayers
+
+        else:
+            self.filter_form = StatisticsFilter()
+        return super(Statistics, self).dispatch(request, *args, **kwargs)
+
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['statistics_title'] = 'Total statistics'
+        
+        if self.QtopGamesExtra :
+            self.QtopGames = self.QtopGames & self.QtopGamesExtra
+            self.QtopPlayers = self.QtopPlayers & self.QtopPlayersExtra
 
         qs = self.top_games_qs.filter(self.QtopGames)
         context['top_games'] = self.top_games_annotate(qs)[:10]
 
         qs = self.top_players_qs.filter(self.QtopPlayers)
         context['top_players'] = self.top_players_annotate(qs)[:10]
+
+        context['filter_form'] = self.filter_form
 
         return context
