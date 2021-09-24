@@ -1,6 +1,15 @@
 {% extends "base.html" %}
 
 {% load static %}
+
+{% block meta %}
+  <title> tce stats </title>
+  <meta property="og:title" content="tce stats" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="{{ og_url }}" />
+  <meta property="og:description" content="{% include  'game/statistics_og.html' %}" />
+{% endblock %}
+
 {% block styles %}
   {{ block.super }}
   <link rel="stylesheet" type="text/css" href="{% static 'css/game.css' %}" />

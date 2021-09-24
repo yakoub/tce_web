@@ -228,5 +228,6 @@ class Statistics(StatisticsMixin, TemplateView):
         context['top_players'] = self.top_players_annotate(qs)[:10]
 
         context['filter_form'] = self.filter_form
+        context['og_url'] = self.request.build_absolute_uri()
 
         return context
