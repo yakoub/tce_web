@@ -1,9 +1,13 @@
-{% extends "base.html" %}
+{% extends "base-sidebars.html" %}
 
 {% load static %}
 {% block styles %}
   {{ block.super }}
   <link rel="stylesheet" type="text/css" href="{% static 'css/game.css' %}" />
+{% endblock %}
+
+{% block sidebar_first %}
+  {% include 'form.html' with form=browse_form %}
 {% endblock %}
 
 {% block main %}
@@ -13,11 +17,6 @@
     <script> TCENames.player_page() </script>
     {% endblock %}
 
-    <form class="dark-gray" name="game-browser" method="get">
-      {{ browse_form }}
-      <input type="submit" value="browse">
-      <a href="."> Clear </a>
-    </form>
     {% block list_items %}
       <ul class="top alternating">
       {% for game in game_list %}
@@ -32,6 +31,6 @@
 
 {% endblock main %}
 
-{% block sidebar %}
+{% block sidebar_second %}
   {% include 'game/player_statistics.html' %}
-{% endblock sidebar %}
+{% endblock %}

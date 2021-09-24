@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "base-sidebars.html" %}
 
 {% load static %}
 {% block meta %}
@@ -14,12 +14,11 @@
   <link rel="stylesheet" type="text/css" href="{% static 'css/game.css' %}" />
 {% endblock %}
 
+{% block sidebar_first %}
+  {% include 'form.html' with form=browse_form %}
+{% endblock %}
+
 {% block main %}
-  <form class="dark-gray" name="game-browser" method="get">
-    {{ browse_form }}
-    <input type="submit" value="browse">
-    <a href="."> Clear </a>
-  </form>
   <section class="list game-list">
     {% block list_header %}
     {% endblock %}
@@ -37,6 +36,6 @@
   {% include 'pager.html' with page=page_obj %}
 {% endblock main %}
 
-{% block sidebar %}
+{% block sidebar_second %}
   {% include 'game/statistics.html' %}
-{% endblock sidebar %}
+{% endblock %}

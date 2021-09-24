@@ -10,7 +10,7 @@
   {% endblock %}
   {% block styles %}
     <link rel="stylesheet" type="text/css" href="{% static 'css/base.css' %}" />
-    <link rel="stylesheet" type="text/css" href="{% static 'css/two-columns.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/three-columns.css' %}" />
   {% endblock %}
 
   {% block scripts_head %}
@@ -22,13 +22,17 @@
 <body class="dark-blue">
   <div id="page">
     {% include 'navigation.html' %}
+    <aside class="first">
+      {% block sidebar_first %}
+      {% endblock %}
+    </aside>
     <main>
-    {% block main %}
-    {% endblock %}
+      {% block main %}
+      {% endblock %}
     </main>
-    <aside>
-    {% block sidebar %}
-    {% endblock %}
+    <aside class="second">
+      {% block sidebar_second %}
+      {% endblock %}
     </aside>
   </div>
   <!-- pre> {# % debug % #} </pre -->

@@ -39,7 +39,7 @@ section.statistics {
   border-radius: 0.4rem;
 }
 
-aside section.statistics table {
+section.statistics table {
   width: 100%;
   margin-top: 2rem;
   font-size: 0.8rem;

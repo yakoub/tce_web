@@ -1,0 +1,10 @@
+<nav> 
+  <a href="{% url 'game:game-scores' %}"> Scores </a>
+  <a href="{% url 'game:game-stats' %}"> Statistics </a>
+  <label> Switch to :
+    <select>
+      <option selected value="scores"> Scores </option> 
+      <option value="stats"> Statistics </option>
+    </select>
+  </label>
+</nav>
