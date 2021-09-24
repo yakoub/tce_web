@@ -1,23 +1,37 @@
 from django.views.generic import DetailView, ListView, TemplateView
 from django.core.paginator import Paginator
 from django.db.models import Count, Sum, Max, Q
-from datetime import datetime, timedelta
 from .models import GameMatch, GamePlayer, PlayerIndex
 from .forms import GameBrowser
 
 class BrowserMixin:
+    
+    def browse_dispatch(self, request):
+        GET = self.request.GET
+        self.Qfilters = None
+        if ('start' in GET):
+            self.browse_form = GameBrowser(GET)
+            form = self.browse_form
+            if form.is_valid():
+                Qfilters = None
+                if (form.cleaned_data['start']):
+                    start = form.cleaned_data['start'].replace(hour=0, minute=0, second=0)
+                    Qfilters = Q(created__gte=start)
+                if (form.cleaned_data['end']):
+                    end = form.cleaned_data['end'].replace(hour=23, minute=59, second=59)
+                    Qend = Q(created__lte=end)
+                    Qfilters = Qfilters & Qend if Qfilters else Qend
+                if (form.cleaned_data['server'] != -1):
+                    Qserver = Q(server=form.cleaned_data['server'])
+                    Qfilters = Qfilters & Qserver if Qfilters else Qserver
+                self.Qfilters = Qfilters
 
-    def browse_form(self, context):
-        if ('start' in self.request.GET):
-            context['browse_form'] = GameBrowser(self.request.GET)
         else:
-            context['browse_form'] = GameBrowser()
+            self.browse_form = GameBrowser()
 
     def browse_query(self, queryset):
-        if ('start' in self.request.GET):
-            start = self.request.GET['start'] + ' 00:00:00'
-            end = self.request.GET['end'] + ' 23:59:59'
-            queryset = queryset.filter(created__gte=start, created__lte=end)
+        if (self.Qfilters):
+            queryset = queryset.filter(self.Qfilters)
         return queryset
 
     def pager_links(self, context):
@@ -79,6 +93,10 @@ class GameList(BrowserMixin, StatisticsMixin, TeamsMixin, ListView):
     model = GameMatch
     paginate_by = 10
 
+    def dispatch(self, request, *args, **kwargs):
+        self.browse_dispatch(request)
+        return super(GameList, self).dispatch(request, *args, **kwargs)
+
     def get_queryset(self):
         queryset = super(GameList, self).get_queryset()
         queryset = queryset.prefetch_related('gameplayer_set__player')\
@@ -90,7 +108,7 @@ class GameList(BrowserMixin, StatisticsMixin, TeamsMixin, ListView):
         for game in context['object_list']:
             self.teams_context(game) 
         self.statistic_500_context(context)
-        self.browse_form(context)
+        context['browse_form'] = self.browse_form
         self.pager_links(context)
         context['og_url'] = self.request.build_absolute_uri()
 
@@ -123,6 +141,10 @@ class PlayerView(BrowserMixin, TeamsMixin, DetailView):
 
     slug_field = 'id'
 
+    def dispatch(self, request, *args, **kwargs):
+        self.browse_dispatch(request)
+        return super(PlayerView, self).dispatch(request, *args, **kwargs)
+
     def get_context_data(self, **kwargs):
         context = super(PlayerView, self).get_context_data(**kwargs)
         game_list = GameMatch.objects\
@@ -137,7 +159,7 @@ class PlayerView(BrowserMixin, TeamsMixin, DetailView):
         context['game_list'] = paginator.get_page(page_number)
         for game in context['game_list']:
             self.teams_context(game) 
-        self.browse_form(context)
+        context['browse_form'] = self.browse_form
         context['page_obj'] = context['game_list']
         self.pager_links(context)
 
