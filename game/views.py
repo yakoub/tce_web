@@ -55,7 +55,7 @@ class StatisticsMixin:
             .order_by('-player_count')
 
     top_players_qs = PlayerIndex.objects
-    QtopPlayers = Q(gameplayer__game__gametype=5)
+    QtopPlayers = Q(gameplayer__game__gametype=5) & ~Q(guid='#')
     def top_players_annotate(self, qs):
         return qs.annotate(total_kills = Sum('gameplayer__kills'))\
             .annotate(total_deaths = Sum('gameplayer__deaths'))\
