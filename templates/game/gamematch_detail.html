@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "page.html" %}
 
 {% load static %}
 {% block meta %}
@@ -12,6 +12,12 @@
   {{ block.super }}
   <link rel="stylesheet" type="text/css" href="{% static 'css/game.css' %}" />
 {% endblock styles %}
+
+{% block navigation %}
+  {% with main_title="Game" side_title="Statistics" %}
+  {{ block.super }}
+  {% endwith %}
+{% endblock %}
 
 {% block main %}
 <article class="game dark-gray">
@@ -98,4 +104,5 @@
 
 {% block sidebar %}
   {% include 'game/statistics.html' %}
+  {{ block.super }}
 {% endblock sidebar %}

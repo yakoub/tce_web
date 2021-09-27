@@ -1,11 +1,11 @@
 
-[terrorists]
+[Terrorists]
 {% for player in gamematch.red_players %} {{ player.player.name_plain }}, {% endfor %}
-[specops]
+[Specops]
 {% for player in gamematch.blue_players %} {{ player.player.name_plain }}, {% endfor %}
 {% if gamematch.spectators %}
-[spectators]
+[Spectators]
 {% for player in gamematch.spectators %} {{ player.player.name_plain }}, {% endfor %} {% endif %} 
 {{ gamematch.server.hostname_plain }}
-+connect {{gamematch.server.ip}}:{{gamematch.server.port}}
+/connect {{gamematch.server.ip}}:{{gamematch.server.port}}
 {{ gamematch.created|date:"N j, Y - H:i e" }}

@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% load static %}
+{% block styles %}
+  {{ block.super }}
+  <link rel="stylesheet" type="text/css" href="{% static 'css/three-columns.css' %}" />
+{% endblock %}
+
+{% block page %}
+  <nav>
+  {% block navigation %}
+    {{ block.super }}
+    <label> Switch to :
+      <select>
+        <option value="1"> {{ first_title |default:"First" }} </option> 
+        <option selected value="2"> {{ main_title |default:"Main" }} </option> 
+        <option value="3"> {{ second_title |default:"Second" }} </option>
+      </select>
+    </label>
+  {% endblock %}
+  </nav>
+  <aside class="first">
+    {% block sidebar_first %}
+    {% endblock %}
+  </aside>
+  <main>
+    {% block main %}
+    {% endblock %}
+  </main>
+  <aside class="second">
+    {% block sidebar_second %}
+    {% endblock %}
+  </aside>
+{% endblock page %}

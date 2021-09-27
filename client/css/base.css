@@ -2,6 +2,10 @@ body {
   font-family: Courier;
 }
 
+.not-shown {
+  display: none;
+}
+
 /* colors */
 body {
   background-color: #00695C; 

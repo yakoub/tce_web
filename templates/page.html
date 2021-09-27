@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block styles %}
+  {{ block.super }}
+  <link rel="stylesheet" type="text/css" href="{% static 'css/two-columns.css' %}" />
+{% endblock styles %}
+
+{% block page %}
+  <nav>
+  {% block navigation %}
+    {{ block.super }}
+    <label> Switch to :
+      <select>
+        <option selected value="1"> {{ main_title |default:"Main" }} </option> 
+        <option value="2"> {{ side_title |default:"Sidebar" }} </option>
+      </select>
+    </label>
+  {% endblock %}
+  </nav>
+
+  <main>
+  {% block main %}
+  {% endblock %}
+  </main>
+
+  <aside>
+  {% block sidebar %}
+  {% endblock %}
+  </aside>
+{% endblock page %}

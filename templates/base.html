@@ -1,5 +1,4 @@
 {% load static %}
-{% load i18n %}
 <!DOCTYPE html>
 <html prefix="og: https://ogp.me/hs#">
 <head>
@@ -10,7 +9,6 @@
   {% endblock %}
   {% block styles %}
     <link rel="stylesheet" type="text/css" href="{% static 'css/base.css' %}" />
-    <link rel="stylesheet" type="text/css" href="{% static 'css/two-columns.css' %}" />
   {% endblock %}
 
   {% block scripts_head %}
@@ -21,15 +19,14 @@
 </head>
 <body class="dark-blue">
   <div id="page">
-    {% include 'navigation.html' %}
-    <main>
-    {% block main %}
+  {% block page %}
+    <nav> 
+    {% block navigation %}
+      <a href="{% url 'game:game-scores' %}"> Scores </a>
+      <a href="{% url 'game:game-stats' %}"> Statistics </a>
     {% endblock %}
-    </main>
-    <aside>
-    {% block sidebar %}
-    {% endblock %}
-    </aside>
+    </nav> 
+  {% endblock %}
   </div>
   <!-- pre> {# % debug % #} </pre -->
   <!-- pre> {# {inspect} #} </pre -->

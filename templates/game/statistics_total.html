@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "page.html" %}
 
 {% load static %}
 
@@ -14,6 +14,12 @@
   {{ block.super }}
   <link rel="stylesheet" type="text/css" href="{% static 'css/game.css' %}" />
 {% endblock styles %}
+
+{% block navigation %}
+  {% with main_title="Statistics" side_title="Filter" %}
+  {{ block.super }}
+  {% endwith %}
+{% endblock %}
 
 {% block main %}
   {% include 'game/statistics.html' %}

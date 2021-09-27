@@ -1,4 +1,4 @@
-{% extends "base-sidebars.html" %}
+{% extends "page-sidebars.html" %}
 
 {% load static %}
 {% block meta %}
@@ -14,28 +14,30 @@
   <link rel="stylesheet" type="text/css" href="{% static 'css/game.css' %}" />
 {% endblock %}
 
+{% block navigation %}
+  {% with main_title="Scores" first_title="Filter" second_title="Statistics" %}
+  {{ block.super }}
+  {% endwith %}
+{% endblock %}
+
 {% block sidebar_first %}
   {% include 'form.html' with form=browse_form %}
 {% endblock %}
 
 {% block main %}
   <section class="list game-list">
-    {% block list_header %}
-    {% endblock %}
-
-    {% block list_items %}
-      <ul class="top alternating">
-      {% for game in object_list %}
-        <li class="altered"> 
-        {% include 'game/gamematch_short.html' %}
-        </li>
-      {% endfor %}
-      </ul>
-    {% endblock %}
+    <ul class="top alternating">
+    {% for game in object_list %}
+      <li class="altered"> 
+      {% include 'game/gamematch_short.html' %}
+      </li>
+    {% endfor %}
+    </ul>
   </section>
   {% include 'pager.html' with page=page_obj %}
 {% endblock main %}
 
 {% block sidebar_second %}
   {% include 'game/statistics.html' %}
+  {{ block.super }}
 {% endblock %}

@@ -1,9 +1,15 @@
-{% extends "base-sidebars.html" %}
+{% extends "page-sidebars.html" %}
 
 {% load static %}
 {% block styles %}
   {{ block.super }}
   <link rel="stylesheet" type="text/css" href="{% static 'css/game.css' %}" />
+{% endblock %}
+
+{% block navigation %}
+  {% with main_title="Player games" first_title="Filter" second_title="Statistics" %}
+  {{ block.super }}
+  {% endwith %}
 {% endblock %}
 
 {% block sidebar_first %}
@@ -33,4 +39,5 @@
 
 {% block sidebar_second %}
   {% include 'game/player_statistics.html' %}
+  {{ block.super }}
 {% endblock %}
