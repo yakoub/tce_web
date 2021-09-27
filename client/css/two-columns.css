@@ -42,9 +42,11 @@
     display: flex;
     justify-content: space-around;
   }
-  #page aside {
+
+  .not-shown {
     display: none;
   }
+
 }
 
 @media (max-width: 620px) {
