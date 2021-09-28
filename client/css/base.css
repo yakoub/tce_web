@@ -65,3 +65,8 @@ form[name="game-browser"] {
   margin-bottom: 1rem;
   border-radius: 0.4rem;
 }
+
+/* discord widget */
+iframe.discord {
+  margin-top: 1em;
+}
