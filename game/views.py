@@ -4,7 +4,7 @@ from django.db.models import Count, Sum, Max, Q
 from .models import *
 from .mixins import *
 
-class GameList(BrowserMixin, StatisticsMixin, TeamsMixin, ListView):
+class GameList(ServerBrowserMixin, StatisticsMixin, TeamsMixin, ListView):
     
     model = GameMatch
     paginate_by = 10
@@ -51,7 +51,7 @@ class GameView(StatisticsMixin, TeamsMixin, DetailView):
         self.statistic_500_context(context)
         return context
 
-class PlayerView(BrowserMixin, TeamsMixin, DetailView):
+class PlayerView(ServerBrowserMixin, TeamsMixin, DetailView):
 
     model = PlayerIndex
 
@@ -143,7 +143,7 @@ class Statistics(StatisticsMixin, TemplateView):
         self.QtopGamesExtra = None
         self.QtopPlayersExtra = None
         if ('start' in GET):
-            self.filter_form = StatisticsFilter(GET)
+            self.filter_form = GameBrowser(GET)
             form = self.filter_form
             if form.is_valid():
                 Qgames = None
@@ -163,7 +163,7 @@ class Statistics(StatisticsMixin, TemplateView):
                 self.QtopPlayersExtra = Qplayers
 
         else:
-            self.filter_form = StatisticsFilter()
+            self.filter_form = GameBrowser()
         return super(Statistics, self).dispatch(request, *args, **kwargs)
 
 

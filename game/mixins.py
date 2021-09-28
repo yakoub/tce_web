@@ -3,29 +3,30 @@ from .models import *
 from .forms import *
 
 class BrowserMixin:
+
+    Form = GameBrowser
+
+    def query_filters(self):
+        form = self.browse_form
+        Qfilters = None
+        if (form.cleaned_data['start']):
+            start = form.cleaned_data['start'].replace(hour=0, minute=0, second=0)
+            Qfilters = Q(created__gte=start)
+        if (form.cleaned_data['end']):
+            end = form.cleaned_data['end'].replace(hour=23, minute=59, second=59)
+            Qend = Q(created__lte=end)
+            Qfilters = Qfilters & Qend if Qfilters else Qend
+        self.Qfilters = Qfilters
     
     def browse_dispatch(self, request):
         GET = request.GET
         self.Qfilters = None
         if ('start' in GET):
-            self.browse_form = GameBrowser(GET)
-            form = self.browse_form
-            if form.is_valid():
-                Qfilters = None
-                if (form.cleaned_data['start']):
-                    start = form.cleaned_data['start'].replace(hour=0, minute=0, second=0)
-                    Qfilters = Q(created__gte=start)
-                if (form.cleaned_data['end']):
-                    end = form.cleaned_data['end'].replace(hour=23, minute=59, second=59)
-                    Qend = Q(created__lte=end)
-                    Qfilters = Qfilters & Qend if Qfilters else Qend
-                if (form.cleaned_data['server'] != -1):
-                    Qserver = Q(server=form.cleaned_data['server'])
-                    Qfilters = Qfilters & Qserver if Qfilters else Qserver
-                self.Qfilters = Qfilters
-
+            self.browse_form = self.Form(GET)
+            if self.browse_form.is_valid():
+                self.query_filters()
         else:
-            self.browse_form = GameBrowser()
+            self.browse_form = self.Form()
 
     def browse_query(self, queryset):
         if (self.Qfilters):
@@ -42,6 +43,18 @@ class BrowserMixin:
             get_params['page'] = context['page_obj'].next_page_number()
             context['next_page_params'] = get_params.urlencode()
 
+class ServerBrowserMixin(BrowserMixin):
+
+    Form = ServerBrowser
+
+    def query_filters(self):
+        super(ServerBrowserMixin, self).query_filters()
+        form = self.browse_form
+        Qfilters = self.Qfilters
+        if (form.cleaned_data['server'] != -1):
+            Qserver = Q(server=form.cleaned_data['server'])
+            Qfilters = Qfilters & Qserver if Qfilters else Qserver
+        self.Qfilters = Qfilters
 
 class TeamsMixin:
 

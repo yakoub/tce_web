@@ -3,6 +3,17 @@ from game.models import GameServer
 
 
 class GameBrowser(forms.Form):
+    submit_label = 'Filter'
+
+    start = forms.DateTimeField(label='Start time', required=False,\
+        widget=forms.DateInput(attrs={'type': 'date'})\
+        )
+    end = forms.DateTimeField(label='End time', required=False,\
+        widget=forms.DateInput(attrs={'type': 'date'})\
+        )
+
+
+class ServerBrowser(GameBrowser):
 
     servers = GameServer.objects.all()
     
@@ -13,22 +24,6 @@ class GameBrowser(forms.Form):
             choices.append((server.id, server.hostname_plain))
         self.fields['server'].choices = choices
 
-    start = forms.DateTimeField(label='Start time', required=False,\
-        widget=forms.DateInput(attrs={'type': 'date'})\
-        )
-    end = forms.DateTimeField(label='End time', required=False,\
-        widget=forms.DateInput(attrs={'type': 'date'})\
-        )
     server = forms.TypedChoiceField(label='Server', required=False,\
         coerce=int, empty_value=-1\
         )
-    submit_label = 'browse'
-
-class StatisticsFilter(forms.Form):
-    start = forms.DateTimeField(label='Start time', required=False,\
-        widget=forms.DateInput(attrs={'type': 'date'})\
-        )
-    end = forms.DateTimeField(label='End time', required=False,\
-        widget=forms.DateInput(attrs={'type': 'date'})\
-        )
-    submit_label = 'filter'
