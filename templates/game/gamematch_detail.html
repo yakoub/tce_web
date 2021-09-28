@@ -25,7 +25,9 @@
   <header class="highlighted">
     <div class="map"> <em> Map  </em> {{ gamematch.mapname }} </div>
     <div class="hostname"> <em> hostname  </em> 
+      <a href="{{ gamematch.server.get_absolute_url }}">
       <span data-name="{{ gamematch.server.hostname }}"> </span>
+      </a>
     </div>
     <div class="gametype"> 
       <em> Gametype </em>  <span data-type="{{gamematch.gametype }}"></span>
