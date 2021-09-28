@@ -1,7 +1,7 @@
 from django.views.generic import DetailView, ListView, TemplateView
 from django.core.paginator import Paginator
 from django.db.models import Count, Sum, Max, Q
-from .models import GameMatch, GamePlayer, PlayerIndex
+from .models import GameMatch, GamePlayer, PlayerIndex, GameServer
 from .forms import GameBrowser, StatisticsFilter
 
 class BrowserMixin:
@@ -148,7 +148,7 @@ class PlayerView(BrowserMixin, TeamsMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super(PlayerView, self).get_context_data(**kwargs)
         game_list = GameMatch.objects\
-            .filter(gameplayer__player_id = self.object.id)\
+            .filter(gameplayer__player = self.object.id)\
             .prefetch_related('gameplayer_set__player')\
             .prefetch_related('server')\
             .order_by('-id')
@@ -173,12 +173,51 @@ class PlayerView(BrowserMixin, TeamsMixin, DetailView):
 
     def top_games(self, context):
         queryset = GamePlayer.objects.filter(game__gametype=5)\
+            .prefetch_related('game')\
             .order_by('-kills')
         if (self.object.guid != '#') :
             queryset = queryset.filter(player__guid=self.object.guid)
         else :
             queryset = queryset.filter(player=self.object.id)
         context['top_games'] = queryset[:5]
+
+class GameServerView(BrowserMixin, TeamsMixin, DetailView):
+
+    model = GameServer
+
+    def dispatch(self, request, *args, **kwargs):
+        self.browse_dispatch(request)
+        return super(GameServerView, self).dispatch(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super(GameServerView, self).get_context_data(**kwargs)
+        game_list = GameMatch.objects\
+            .filter(gameplayer__game__server = self.object.id)\
+            .prefetch_related('gameplayer_set__player')\
+            .prefetch_related('server')\
+            .order_by('-id')
+        game_list = self.browse_query(game_list).all()
+
+        paginator = Paginator(game_list, 10)
+        page_number = self.request.GET.get('page')
+        context['game_list'] = paginator.get_page(page_number)
+        for game in context['game_list']:
+            self.teams_context(game) 
+        context['browse_form'] = self.browse_form
+        context['page_obj'] = context['game_list']
+        self.pager_links(context)
+        context['og_url'] = self.request.build_absolute_uri()
+
+        self.top_games(context)
+        return context
+
+    def top_games(self, context):
+        queryset = GameMatch.objects.filter(\
+            gametype=5, server=self.object.id\
+            ).annotate(player_count = Count('gameplayer'))\
+            .order_by('-player_count')
+        context['top_games'] = queryset[:5]
+
 
 class Statistics(StatisticsMixin, TemplateView):
 

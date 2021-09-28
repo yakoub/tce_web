@@ -1,0 +1,55 @@
+{% extends "page-sidebars.html" %}
+
+{% load static %}
+
+{% block meta %}
+  <title> {{ object.hostname_plain }} </title>
+  <meta property="og:title" content="{{ object.hostname_plain }}" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="{{ og_url }}" />
+  <meta property="og:description" content="{{ object.ip }}: {{ object.port }}" />
+{% endblock %}
+
+{% block styles %}
+  {{ block.super }}
+  <link rel="stylesheet" type="text/css" href="{% static 'css/game.css' %}" />
+{% endblock %}
+
+{% block navigation %}
+  {% with main_title="Server games" first_title="Filter" second_title="Statistics" %}
+  {{ block.super }}
+  {% endwith %}
+{% endblock %}
+
+{% block sidebar_first %}
+  {% include 'form.html' with form=browse_form %}
+{% endblock %}
+
+{% block main %}
+  <section class="list game-list">
+    {% block list_header %}
+    <header> 
+      <em> Name </em> <span data-name="{{ object.hostname }}"> </span> 
+      <em> Address </em> <span> {{ object.ip }}: {{ object.port }} </span>
+    </header>
+    <script> TCENames.player_page() </script>
+    {% endblock %}
+
+    {% block list_items %}
+      <ul class="top alternating">
+      {% for game in game_list %}
+        <li class="altered"> 
+        {% include 'game/gamematch_short.html' %}
+        </li>
+      {% endfor %}
+      </ul>
+    {% endblock %}
+  </section>
+  {% include 'pager.html' with page=game_list %}
+
+{% endblock main %}
+
+{% block sidebar_second %}
+  {% include 'game/server_statistics.html' %}
+  {{ block.super }}
+{% endblock %}

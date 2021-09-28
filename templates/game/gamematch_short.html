@@ -3,7 +3,9 @@
   <header class="highlighted">
     <div class="map"> <em> Map  </em> {{ game.mapname }} </div>
     <div class="hostname"> <em> Hostname  </em> 
+      <a href="{{ game.server.get_absolute_url }}">
       <span data-name="{{ game.server.hostname }}"> </span>
+      </a>
     </div>
     <div class="gametype"> 
       <em> Gametype </em>  <span data-type="{{ game.gametype }}"></span>

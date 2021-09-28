@@ -7,6 +7,9 @@ class GameServer(models.Model):
     ip = models.CharField('IP', max_length=64)
     port = models.IntegerField('Port')
 
+    def get_absolute_url(self):
+        return reverse('game:server-view', kwargs={'pk': self.pk})
+
     class Meta:
         db_table = 'game_server'
         managed = False

@@ -1,0 +1,17 @@
+<section class="dark-gray player-top-games">
+  <table>
+    <caption class="highlighted"> top games: </caption>
+    <thead> <tr> <th> Game </th> <th> Count </th> </tr> </thead>
+    <tbody>
+    {% for game in top_games %}
+    <tr>
+      <td> <a href="{% url 'game:game-view' game.id %}">
+        [{{ game.id }}] 
+      </a> </td>
+      <td> {{ game.player_count }} </td>
+    </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</section>
+
