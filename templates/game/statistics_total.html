@@ -27,4 +27,5 @@
 
 {% block sidebar %}
   {% include 'form.html' with form=filter_form %}
+  {{ block.super }}
 {% endblock sidebar %}
