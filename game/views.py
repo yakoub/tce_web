@@ -88,7 +88,7 @@ class PlayerView(ServerBrowserMixin, TeamsMixin, DetailView):
         return context
 
     def top_games(self, context):
-        queryset = GamePlayer.objects.filter(game__gametype=5)\
+        queryset = GamePlayer.objects.filter(game__gametype=4)\
             .prefetch_related('game')\
             .order_by('-kills')
         if (self.object.guid != '#') :
