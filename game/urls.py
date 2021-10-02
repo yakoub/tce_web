@@ -8,5 +8,5 @@ urlpatterns = [
     path('live', views.GameList.as_view(), name='game-scores'),
     path('game/<int:pk>/', views.GameView.as_view(), name='game-view'),
     path('player/<int:slug>/', views.PlayerView.as_view(), name='player-view'),
-    path('sever/<int:pk>/', views.GameServerView.as_view(), name='server-view'),
+    path('server/<int:pk>/', views.GameServerView.as_view(), name='server-view'),
 ]
