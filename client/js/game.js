@@ -83,18 +83,12 @@ TCENames.setup = function() {
   var codes = new Map()
   this.ncodes = codes
 
-  if (!window.localStorage.getItem('version1')) {
-    window.localStorage.setItem('version1', '#')
-    window.localStorage.removeItem('name-html-^.Chucky<3')
-    console.log('version1 done');
-  }
-
   var types = new Map()
   this.types_map = types
 
-  types.set('2', 'CTF')
-  types.set('5', 'Obj')
-  types.set('7', 'BC')
+  types.set('4', 'CMP')
+  types.set('5', 'LMS')
+  types.set('2', 'OBJ')
 
   codes.set(':', 'c-c1')
   codes.set(';', 'c-c2')
