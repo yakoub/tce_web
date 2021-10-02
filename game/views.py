@@ -143,7 +143,7 @@ class Statistics(StatisticsMixin, TemplateView):
         self.QtopGamesExtra = None
         self.QtopPlayersExtra = None
         if ('start' in GET):
-            self.filter_form = GameBrowser(GET)
+            self.filter_form = StatisticsFilter(GET)
             form = self.filter_form
             if form.is_valid():
                 Qgames = None
@@ -158,12 +158,16 @@ class Statistics(StatisticsMixin, TemplateView):
                     Qgames = Qgames & Qend if Qgames else Qend
                     Qend = Q(gameplayer__game__created__lte=end)
                     Qplayers = Qplayers & Qend if Qplayers else Qend
+                if (form.cleaned_data['exclude_bots']):
+                    Qbots = Q(bot=False)
+                    Qplayers = Qplayers & Qbots if Qplayers else Qbots
 
                 self.QtopGamesExtra = Qgames
                 self.QtopPlayersExtra = Qplayers
 
         else:
-            self.filter_form = GameBrowser()
+            self.QtopPlayersExtra = Q(bot=False)
+            self.filter_form = StatisticsFilter()
         return super(Statistics, self).dispatch(request, *args, **kwargs)
 
 
@@ -173,6 +177,7 @@ class Statistics(StatisticsMixin, TemplateView):
         
         if self.QtopGamesExtra :
             self.QtopGames = self.QtopGames & self.QtopGamesExtra
+        if self.QtopPlayersExtra :
             self.QtopPlayers = self.QtopPlayers & self.QtopPlayersExtra
 
         qs = self.top_games_qs.filter(self.QtopGames)

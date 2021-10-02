@@ -38,6 +38,7 @@ class PlayerIndex(models.Model):
     id = models.IntegerField('id', unique=True)
     name = models.CharField('Name', max_length=64)
     name_plain = models.CharField('Name plain', max_length=64)
+    bot = models.BooleanField('Bot')
 
     def get_absolute_url(self):
         return reverse('game:player-view', kwargs={'slug': self.id})

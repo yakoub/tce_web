@@ -12,6 +12,9 @@ class GameBrowser(forms.Form):
         widget=forms.DateInput(attrs={'type': 'date'})\
         )
 
+class StatisticsFilter(GameBrowser):
+    exclude_bots = forms.BooleanField(label='Exclude bots',\
+        required=False, initial=True)
 
 class ServerBrowser(GameBrowser):
 

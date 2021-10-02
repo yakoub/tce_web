@@ -96,6 +96,6 @@ class StatisticsMixin:
         context['top_games'] = self.top_games_annotate(qs)[:5]
 
         qs = self.top_players_qs\
-            .filter(self.QtopPlayers & Q(gameplayer__game__id__gt=since_id))
+            .filter(self.QtopPlayers & Q(bot=False) & Q(gameplayer__game__id__gt=since_id))
         context['top_players'] = self.top_players_annotate(qs)[:5]
 
