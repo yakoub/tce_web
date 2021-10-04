@@ -61,7 +61,7 @@ class TeamsMixin:
     def teams_context(self, game):
         game.team_red_name = 'Terrorists' if game.server.tcetest else 'Axis'
         game.red_players = []
-        game.team_blue_name = 'Scpecops' if game.server.tcetest else 'Allues'
+        game.team_blue_name = 'Scpecops' if game.server.tcetest else 'Allies'
         game.blue_players = []
         game.spectators = []
         for player in game.gameplayer_set.all():
