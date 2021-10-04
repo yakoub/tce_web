@@ -20,6 +20,27 @@
   </table>
   {% endif %}
 
+  {% if top_players_tce %}
+  <table class="players">
+  <caption class="highlighted"> leading tce players </caption>
+  <thead>
+  <tr> <th> Name </th> <th> Kills </th> <th> Deaths </th> <th> Score </th> </tr>
+  </head>
+  <tbody>
+    {% for player in top_players_tce %}
+    <tr>
+    <td> <a href="{{ player.get_absolute_url }}" data-name="{{ player.name }}">
+    </a> </td> 
+    <td> {{ player.total_kills }} </td>
+    <td> {{ player.total_deaths }} </td>
+    <td> {{ player.total_score }} </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+  </table>
+  {% endif %}
+
+
   {% if top_games %}
   <table>
   <caption class="highlighted"> top games </caption>
@@ -37,7 +58,6 @@
     {% endfor %}
   </table>
   {% endif %}
-
 
   <script type="text/javascript"> TCENames.statistics_section() </script>
 </section>

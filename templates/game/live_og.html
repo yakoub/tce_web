@@ -1,0 +1,3 @@
+
+{% for game in object_list|slice:":3" %}   
+Server: {{ game.server.hostname_plain }} @ {{game.created|date:"N j, Y /H:i e" }} {% endfor %}

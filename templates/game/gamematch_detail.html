@@ -20,7 +20,7 @@
 {% endblock %}
 
 {% block main %}
-<article class="game dark-gray">
+<article class="game dark-gray" {% if gamematch.server.tcetest %} data-tce="1" {% endif %}>
   <a class="game-id" href="{{ gamematch.get_absolute_url }}"> [{{object.id}}] </a>
   <header class="highlighted">
     <div class="map"> <em> Map  </em> {{ gamematch.mapname }} </div>
@@ -44,7 +44,9 @@
   </tr> </thead>
   <tbody>
     <tr> 
-      <th class="highlighted" colspan="7"> <em> Allies </em> {{gamematch.team_blue}} </th>
+      <th class="highlighted" colspan="7"> 
+        <em> {{gamematch.team_blue_name}} </em> {{gamematch.team_blue}} 
+      </th>
     </tr>
     {% for player in gamematch.blue_players %}
       <tr>
@@ -62,7 +64,9 @@
   </tbody> 
   <tbody>
     <tr> 
-      <th class="highlighted" colspan="7"> <em> Axis </em> {{gamematch.team_red}} </th>
+      <th class="highlighted" colspan="7"> 
+        <em> {{gamematch.team_red_name}} </em> {{gamematch.team_red}} 
+      </th>
     </tr>
     {% for player in gamematch.red_players %}
       <tr>

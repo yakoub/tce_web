@@ -6,8 +6,9 @@ TCENames.game_section = function () {
   names.forEach(this.player_names, TCENames)
 
   var gametype = section.querySelector('header.highlighted .gametype span')
-  if (this.types_map.has(gametype.dataset.type)) {
-    gametype.textContent = this.types_map.get(gametype.dataset.type)
+  var types_map = section.dataset.hasOwnProperty('tce') ? this.tce_types_map : this.types_map
+  if (types_map.has(gametype.dataset.type)) {
+    gametype.textContent = types_map.get(gametype.dataset.type)
   }
   var hostname = section.querySelector('header.highlighted .hostname span')
   this.player_names(hostname)
@@ -83,12 +84,25 @@ TCENames.setup = function() {
   var codes = new Map()
   this.ncodes = codes
 
+  if (!window.localStorage.getItem('version1')) {
+    window.localStorage.setItem('version1', '#')
+    window.localStorage.removeItem('name-html-^.Chucky<3')
+    console.log('version1 done');
+  }
+
+  var tce_types = new Map()
+  this.tce_types_map = tce_types
+
+  tce_types.set('2', 'CTF')
+  tce_types.set('5', 'Obj')
+  tce_types.set('7', 'BC')
+
   var types = new Map()
   this.types_map = types
 
   types.set('4', 'CMP')
+  types.set('2', 'Obj')
   types.set('5', 'LMS')
-  types.set('2', 'OBJ')
 
   codes.set(':', 'c-c1')
   codes.set(';', 'c-c2')

@@ -161,12 +161,28 @@ class Statistics(StatisticsMixin, TemplateView):
                 if (form.cleaned_data['exclude_bots']):
                     Qbots = Q(bot=False)
                     Qplayers = Qplayers & Qbots if Qplayers else Qbots
+                if (form.cleaned_data['game'] == 1):
+                    Qtype = Q(server__tcetest=True)
+                    Qgames = Qgames & Qtype if Qgames else Qtype
+                    Qgame = Q(gameplayer__game__server__tcetest=True)\
+                    & Q(gameplayer__game__gametype=5)
+                    Qplayers = Qplayers & Qgame if Qplayers else Qgame
+                if (form.cleaned_data['game'] == 2):
+                    Qtype = Q(server__tcetest=False)
+                    Qgames = Qgames & Qtype if Qgames else Qtype
+                    Qgame = Q(gameplayer__game__server__tcetest=False)\
+                    & Q(gameplayer__game__gametype=4)
+                    Qplayers = Qplayers & Qgame if Qplayers else Qgame
 
                 self.QtopGamesExtra = Qgames
                 self.QtopPlayersExtra = Qplayers
 
         else:
-            self.QtopPlayersExtra = Q(bot=False)
+            self.QtopPlayersExtra = Q(bot=False)\
+                & Q(gameplayer__game__server__tcetest=True)\
+                & Q(gameplayer__game__gametype=5)
+            self.QtopGamesExtra = Q(server__tcetest=True)
+
             self.filter_form = StatisticsFilter()
         return super(Statistics, self).dispatch(request, *args, **kwargs)
 

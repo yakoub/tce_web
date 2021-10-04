@@ -59,7 +59,9 @@ class ServerBrowserMixin(BrowserMixin):
 class TeamsMixin:
 
     def teams_context(self, game):
+        game.team_red_name = 'Terrorists' if game.server.tcetest else 'Axis'
         game.red_players = []
+        game.team_blue_name = 'Scpecops' if game.server.tcetest else 'Allues'
         game.blue_players = []
         game.spectators = []
         for player in game.gameplayer_set.all():
@@ -80,7 +82,7 @@ class StatisticsMixin:
             .order_by('-player_count')
 
     top_players_qs = PlayerIndex.objects
-    QtopPlayers = Q(gameplayer__game__gametype=4) & ~Q(guid='#')
+    QtopPlayers = ~Q(guid='#')
     def top_players_annotate(self, qs):
         return qs.annotate(total_kills = Sum('gameplayer__kills'))\
             .annotate(total_deaths = Sum('gameplayer__deaths'))\
@@ -95,7 +97,17 @@ class StatisticsMixin:
         qs = self.top_games_qs.filter(self.QtopGames & Q(id__gt=since_id))
         context['top_games'] = self.top_games_annotate(qs)[:5]
 
+        QtopPlayers = Q(gameplayer__game__gametype=4)\
+            &Q(gameplayer__game__server__tcetest=False)\
+            & Q(bot=False) & self.QtopPlayers
         qs = self.top_players_qs\
-            .filter(self.QtopPlayers & Q(bot=False) & Q(gameplayer__game__id__gt=since_id))
+            .filter(QtopPlayers & Q(gameplayer__game__id__gt=since_id))
         context['top_players'] = self.top_players_annotate(qs)[:5]
+
+        QtopPlayers = Q(gameplayer__game__gametype=5)\
+            &Q(gameplayer__game__server__tcetest=True)\
+            & Q(bot=False) & self.QtopPlayers
+        qs = self.top_players_qs\
+            .filter(QtopPlayers & Q(gameplayer__game__id__gt=since_id))
+        context['top_players_tce'] = self.top_players_annotate(qs)[:5]
 

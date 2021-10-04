@@ -6,6 +6,7 @@ class GameServer(models.Model):
     hostname_plain = models.CharField('Hostname plain', max_length=64)
     ip = models.CharField('IP', max_length=64)
     port = models.IntegerField('Port')
+    tcetest = models.BooleanField('tcetest')
 
     def get_absolute_url(self):
         return reverse('game:server-view', kwargs={'pk': self.pk})

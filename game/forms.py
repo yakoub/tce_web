@@ -15,6 +15,9 @@ class GameBrowser(forms.Form):
 class StatisticsFilter(GameBrowser):
     exclude_bots = forms.BooleanField(label='Exclude bots',\
         required=False, initial=True)
+    game = forms.TypedChoiceField(label='Game'\
+        ,choices=[(1, 'TCE'), (2, 'ET')], coerce=int\
+        ,widget = forms.RadioSelect ,required=True, initial=1)
 
 class ServerBrowser(GameBrowser):
 
