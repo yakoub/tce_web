@@ -1,4 +1,3 @@
 {% if top_players %}
-{% for player in top_players %} name {{ player.name_plain }} 
- kills:{{ player.total_kills }} deaths:{{ player.total_deaths }}
+{% for player in top_players %} [{{ player.name_plain }}] kills:{{ player.total_kills }} deaths:{{ player.total_deaths }}
 {% endfor %} {% else %} No results found {% endif %}
