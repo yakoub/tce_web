@@ -4,7 +4,7 @@
   <table class="players">
   <caption class="highlighted"> leading et players </caption>
   <thead>
-  <tr> <th> Name </th> <th> Kills </th> <th> Deaths </th> <th> Score </th> </tr>
+  <tr> <th> Name </th> <th> K </th> <th> D </th> <th> K/D </th> </tr>
   </head>
   <tbody>
     {% for player in top_players %}
@@ -13,7 +13,7 @@
     </a> </td> 
     <td> {{ player.total_kills }} </td>
     <td> {{ player.total_deaths }} </td>
-    <td> {{ player.total_score }} </td>
+    <td> {{ player.ratio|floatformat:2 }} </td>
     </tr>
     {% endfor %}
   </tbody>
@@ -24,7 +24,7 @@
   <table class="players">
   <caption class="highlighted"> leading tce players </caption>
   <thead>
-  <tr> <th> Name </th> <th> Kills </th> <th> Deaths </th> <th> Score </th> </tr>
+  <tr> <th> Name </th> <th> K </th> <th> D </th> <th> K/D </th> </tr>
   </head>
   <tbody>
     {% for player in top_players_tce %}
@@ -33,7 +33,7 @@
     </a> </td> 
     <td> {{ player.total_kills }} </td>
     <td> {{ player.total_deaths }} </td>
-    <td> {{ player.total_score }} </td>
+    <td> {{ player.ratio|floatformat:2 }} </td>
     </tr>
     {% endfor %}
   </tbody>

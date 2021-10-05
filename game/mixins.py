@@ -1,4 +1,5 @@
-from django.db.models import Q, Count, Max, Sum
+from django.db.models import F, Q, Count, Max, Sum
+from django.db.models import FloatField, ExpressionWrapper
 from .models import *
 from .forms import *
 
@@ -82,12 +83,15 @@ class StatisticsMixin:
             .order_by('-player_count')
 
     top_players_qs = PlayerIndex.objects
-    QtopPlayers = ~Q(guid='#')
+    QtopPlayers = Q(total_deaths__gt=0) & ~Q(guid='#')
     def top_players_annotate(self, qs):
+        ratio_expr = ExpressionWrapper(\
+            F('total_kills')/F('total_deaths'),\
+            output_field=FloatField())
         return qs.annotate(total_kills = Sum('gameplayer__kills'))\
             .annotate(total_deaths = Sum('gameplayer__deaths'))\
             .annotate(total_score = Sum('gameplayer__score'))\
-            .order_by('-total_kills')
+            .annotate(ratio=ratio_expr).order_by('-ratio')
     
     def statistic_500_context(self, context):
         last_id = GameMatch.objects.aggregate(id = Max('id'))
@@ -100,14 +104,15 @@ class StatisticsMixin:
         QtopPlayers = Q(gameplayer__game__gametype=4)\
             &Q(gameplayer__game__server__tcetest=False)\
             & Q(bot=False) & self.QtopPlayers
-        qs = self.top_players_qs\
+
+        qs = self.top_players_annotate(self.top_players_qs)\
             .filter(QtopPlayers & Q(gameplayer__game__id__gt=since_id))
-        context['top_players'] = self.top_players_annotate(qs)[:5]
+        context['top_players'] = qs[:5]
 
         QtopPlayers = Q(gameplayer__game__gametype=5)\
             &Q(gameplayer__game__server__tcetest=True)\
             & Q(bot=False) & self.QtopPlayers
-        qs = self.top_players_qs\
+        qs = self.top_players_annotate(self.top_players_qs)\
             .filter(QtopPlayers & Q(gameplayer__game__id__gt=since_id))
-        context['top_players_tce'] = self.top_players_annotate(qs)[:5]
+        context['top_players_tce'] = qs[:5]
 
