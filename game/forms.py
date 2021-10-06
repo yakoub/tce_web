@@ -16,8 +16,18 @@ class StatisticsFilter(GameBrowser):
     exclude_bots = forms.BooleanField(label='Exclude bots',\
         required=False, initial=True)
     game = forms.TypedChoiceField(label='Game'\
-        ,choices=[(1, 'TCE'), (2, 'ET')], coerce=int\
-        ,widget = forms.RadioSelect ,required=True, initial=1)
+        ,required=True, initial=1, coerce=int\
+        ,widget = forms.RadioSelect)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        gametype = [
+            ('TCE', ((1, 'OBJ'), (2, 'BC'), (3, 'CTF'))),
+            ('ET', ((4, 'CMP'), (5, 'OBJ'))),
+        ]
+        self.fields['game'].choices = gametype
+    gametype_map = [0, 5, 7, 2, 4, 2]
+    tce_last = 3
 
 class ServerBrowser(GameBrowser):
 

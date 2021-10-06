@@ -46,7 +46,7 @@ TCENames.player_names = function (a) {
 
   var pattern = '^(?<prefix>[^^]*)'
   + '((?<code>\\^[a-z0-9])|(?<ncode>\\^[^a-z0-9]))'
-  + '(?<colored>[^^]+)'
+  + '((?<colored>[^^]+)|(?<dcode>\\^[^^]))'
   + '(?<suffix>.*)$'
   var reg = new RegExp(pattern)
   let parse = name.match(reg)
@@ -56,6 +56,11 @@ TCENames.player_names = function (a) {
   }
   while (parse) {
     name_html += parse.groups.prefix
+    if (parse.groups.dcode) { //consecutive codes, ignore the first
+      name_suffix = parse.groups.dcode + parse.groups.suffix
+      parse = name_suffix.match(reg)
+      continue
+    }
     if (parse.groups.code) {
       let code = parse.groups.code[1];
       name_html += '<i class="c-'+code+'">' + parse.groups.colored + '</i>'
@@ -92,10 +97,10 @@ TCENames.setup = function() {
   var codes = new Map()
   this.ncodes = codes
 
-  if (!window.localStorage.getItem('version1')) {
-    window.localStorage.setItem('version1', '#')
-    window.localStorage.removeItem('name-html-^.Chucky<3')
-    console.log('version1 done');
+  if (window.localStorage.getItem('names_version') != 1) {
+    window.localStorage.clear()
+    window.localStorage.setItem('names_version', '1')
+    console.log('name cache cleared');
   }
 
   var tce_types = new Map()
