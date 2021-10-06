@@ -50,9 +50,11 @@ TCENames.player_names = function (a) {
   + '(?<suffix>.*)$'
   var reg = new RegExp(pattern)
   let parse = name.match(reg)
-  name_html = ''
+  name_html = name_suffix = ''
+  if (parse) {
+    name_suffix = parse.groups.suffix
+  }
   while (parse) {
-    name = parse.groups.suffix
     name_html += parse.groups.prefix
     if (parse.groups.code) {
       let code = parse.groups.code[1];
@@ -68,9 +70,15 @@ TCENames.player_names = function (a) {
         name_html += parse.groups.ncode + parse.groups.colored
       }
     }
-    parse = name.match(reg)
+    parse = name_suffix.match(reg)
+    if (parse) {
+      name_suffix = parse.groups.suffix
+    }
   }
   if (name_html) {
+    if (name_suffix) {
+      name_html += name_suffix
+    }
     window.localStorage.setItem('name-html-' + a.dataset.name, name_html)
     a.innerHTML = '[' + name_html + ']'
   }
