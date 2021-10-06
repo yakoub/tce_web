@@ -83,7 +83,7 @@ class StatisticsMixin:
             .order_by('-player_count')
 
     top_players_qs = PlayerIndex.objects
-    QtopPlayers = Q(total_deaths__gt=0) & ~Q(guid='#')
+    QtopPlayers = ~Q(guid='#')
     def top_players_annotate(self, qs):
         ratio_expr = ExpressionWrapper(\
             F('total_kills')/F('total_deaths'),\
@@ -91,7 +91,7 @@ class StatisticsMixin:
         return qs.annotate(total_kills = Sum('gameplayer__kills'))\
             .annotate(total_deaths = Sum('gameplayer__deaths'))\
             .annotate(total_score = Sum('gameplayer__score'))\
-            .annotate(ratio=ratio_expr).order_by('-ratio')
+            .annotate(ratio=ratio_expr)
     
     def statistic_500_context(self, context):
         last_id = GameMatch.objects.aggregate(id = Max('id'))
@@ -103,16 +103,16 @@ class StatisticsMixin:
 
         QtopPlayers = Q(gameplayer__game__gametype=4)\
             &Q(gameplayer__game__server__tcetest=False)\
-            & Q(bot=False) & self.QtopPlayers
+            &Q(gameplayer__game__gt=since_id)\
+            &Q(bot=False) & self.QtopPlayers
 
-        qs = self.top_players_annotate(self.top_players_qs)\
-            .filter(QtopPlayers & Q(gameplayer__game__id__gt=since_id))
-        context['top_players'] = qs[:5]
+        qs = self.top_players_qs.filter(QtopPlayers)
+        context['top_players'] = self.top_players_annotate(qs).order_by('-ratio')[:5]
 
         QtopPlayers = Q(gameplayer__game__gametype=5)\
             &Q(gameplayer__game__server__tcetest=True)\
-            & Q(bot=False) & self.QtopPlayers
-        qs = self.top_players_annotate(self.top_players_qs)\
-            .filter(QtopPlayers & Q(gameplayer__game__id__gt=since_id))
-        context['top_players_tce'] = qs[:5]
+            &Q(gameplayer__game__gt=since_id)\
+            &Q(bot=False) & self.QtopPlayers
+        qs = self.top_players_qs.filter(QtopPlayers)
+        context['top_players_tce'] = self.top_players_annotate(qs).order_by('-ratio')[:5]
 

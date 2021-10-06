@@ -1,7 +1,7 @@
 
-[Axis]
+[{{gamematch.team_red_name}}]
 {% for player in gamematch.red_players %} {{ player.player.name_plain }}, {% endfor %}
-[Allies]
+[{{gamematch.team_blue_name}}]
 {% for player in gamematch.blue_players %} {{ player.player.name_plain }}, {% endfor %}
 {% if gamematch.spectators %}
 [Spectators]

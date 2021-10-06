@@ -199,8 +199,8 @@ class Statistics(StatisticsMixin, TemplateView):
         qs = self.top_games_qs.filter(self.QtopGames)
         context['top_games'] = self.top_games_annotate(qs)[:10]
 
-        qs = self.top_players_annotate(self.top_players_qs).filter(self.QtopPlayers)
-        context['top_players'] = qs[:10]
+        qs = self.top_players_qs.filter(self.QtopPlayers)
+        context['top_players'] = self.top_players_annotate(qs).order_by('-total_score')[:10]
 
         context['filter_form'] = self.filter_form
         context['og_url'] = self.request.build_absolute_uri()

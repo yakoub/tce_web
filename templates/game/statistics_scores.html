@@ -4,7 +4,8 @@
   <table class="players">
   <caption class="highlighted"> leading et players </caption>
   <thead>
-  <tr> <th> Name </th> <th> Kills </th> <th> Deaths </th> <th> Ratio </th> </tr>
+  <tr> <th> Name </th> <th> Kills </th> <th> Deaths </th>
+    <th> Ratio </th> <th> Scores </th> </tr>
   </head>
   <tbody>
     {% for player in top_players %}
@@ -14,32 +15,12 @@
     <td> {{ player.total_kills }} </td>
     <td> {{ player.total_deaths }} </td>
     <td> {{ player.ratio|floatformat:2 }} </td>
+    <td> {{ player.scores }} </td>
     </tr>
     {% endfor %}
   </tbody>
   </table>
   {% endif %}
-
-  {% if top_players_tce %}
-  <table class="players">
-  <caption class="highlighted"> leading tce players </caption>
-  <thead>
-  <tr> <th> Name </th> <th> Kills </th> <th> Death </th> <th> Ratio </th> </tr>
-  </head>
-  <tbody>
-    {% for player in top_players_tce %}
-    <tr>
-    <td> <a href="{{ player.get_absolute_url }}" data-name="{{ player.name }}">
-    </a> </td> 
-    <td> {{ player.total_kills }} </td>
-    <td> {{ player.total_deaths }} </td>
-    <td> {{ player.ratio|floatformat:2 }} </td>
-    </tr>
-    {% endfor %}
-  </tbody>
-  </table>
-  {% endif %}
-
 
   {% if top_games %}
   <table>
