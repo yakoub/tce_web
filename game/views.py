@@ -108,10 +108,11 @@ class GameServerView(BrowserMixin, TeamsMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super(GameServerView, self).get_context_data(**kwargs)
         game_list = GameMatch.objects\
-            .filter(gameplayer__game__server = self.object.id)\
             .prefetch_related('gameplayer_set__player')\
             .prefetch_related('server')\
             .order_by('-id')
+        Qserver = Q(gameplayer__game__server = self.object.id)
+        self.Qfilters = self.Qfilters & Qserver if self.Qfilters else Qserver
         game_list = self.browse_query(game_list).all()
 
         paginator = Paginator(game_list, 10)
