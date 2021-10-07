@@ -129,7 +129,9 @@ class GameServerView(BrowserMixin, TeamsMixin, DetailView):
         return context
 
     def top_games(self, context):
-        queryset = GameMatch.objects.filter(server=self.object.id)\
+        queryset = GameMatch.objects.filter(\
+            server=self.object.id\
+            , gameplayer__team__gt=0)\
             .annotate(player_count = Count('gameplayer'))\
             .order_by('-player_count')
         context['top_games'] = queryset[:5]
